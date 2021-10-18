@@ -19,10 +19,19 @@ export default new VueRouter({
                //路由元信息---控制footer显示与隐藏
                meta:{show:true},
           },
-          {
-               path: '/search',
+          {    
+               //代表params参数可有可无，务必要加上?
+               path: '/search/:keyWord?',
                component: Search,
                meta:{show:true},
+               //命名路由
+               name:'search',
+               //路由也可以传递props数据，拥有三种写法
+               //如果 props 被设置为 true，params参数将会被设置为组件属性
+               // props:true,
+               // props:{a:1,b:2}
+               props:(route)=>({keyWord:route.params.keyWord,k:route.query.k})
+               
           },
           {
                path: '/login',

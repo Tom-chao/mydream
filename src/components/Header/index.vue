@@ -37,6 +37,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyWord"
           />
           <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
             搜索
@@ -50,11 +51,40 @@
 <script>
 export default {
   name: "",
+  data(){
+    return {
+      //收集表单数据---关键字的
+      keyWord:''  
+    }
+  },
   methods:{
     //搜索按钮的回调函数
     goSearch(){
       //路由跳转【编程式导航】
-      this.$router.push("/search");
+      //路由的跳转:声明式导航（router-link）、编程式导航（push|replace），编程式导航跟好一些，因为可以书写自己的业务逻辑
+      //路由传参:query参数 、params参数   
+      //区别:params参数，作为URL当中一部分  http://127.0.0.1/home/手机  ---------路由需要占位
+      //query参数，并非URL当中一部分，类似于ajax当中query参数   http://127.0.0.1/home?a=1&b=2
+      /*******************************************************************************************************/
+      //路由传参的写法：学习几种
+      //1：字符串的写法
+      // this.$router.push("/search/" + this.keyWord+"?k="+this.keyWord.toUpperCase());
+      //2:模板字符串
+      // this.$router.push(`/search/${this.keyWord}?k=${this.keyWord.toUpperCase()}`);
+      //3:对象写法
+      this.$router.push({name:"search",params:{keyWord:this.keyWord},query:{k:this.keyWord.toUpperCase()}});
+
+      //面试题1
+      //对象的写法的时候（path）不能结合params参数一起使用
+      // this.$router.push({path:'/search',params:{keyWord:this.keyWord}});
+
+
+      //面试题2：
+      //2:如何指定params参数可传可不传? 
+      // this.$router.push({name:'search',params:{keyWord:''||undefined},query:{k:this.keyWord.toUpperCase()}});
+      //http://127.0.0.1:8080/#/search/abc?k=ABC
+      //http://127.0.0.1:8080/#/search/?k=ABC
+
     }
   },
 };
