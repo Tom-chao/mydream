@@ -1,6 +1,23 @@
 //引入Vue
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+//push|replace方法----VueRouter.prototye原型对象提供的
+
+// //备份一下：原型对象最开始的push方法----【路由跳转的能力】，在人家的基础之上进行二次开发
+let originPush = VueRouter.prototype.push;
+//重写push方法
+VueRouter.prototype.push = function(location){
+   //利用人家原型对象提供的push方法进行路由的跳转
+   //只不过人家push方法上下文务必是VueRouter类的一个实例，因此使用call
+   //this：即为最后调用的对象VueRouter类的实例  
+   originPush.call(this,location);
+}
+
+
+
+
+
 //使用插件
 Vue.use(VueRouter);
 //引入的是一级路由
