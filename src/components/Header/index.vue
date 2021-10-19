@@ -73,6 +73,7 @@ export default {
       // this.$router.push(`/search/${this.keyWord}?k=${this.keyWord.toUpperCase()}`);
       //3:对象写法
       this.$router.push({name:"search",params:{keyWord:this.keyWord},query:{k:this.keyWord.toUpperCase()}});
+  
       //push方法在vueRouter.prototype
 
       //面试题1
