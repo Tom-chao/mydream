@@ -6,6 +6,6 @@ import request from './request';
 export const reqCategoryList = ()=>{
   //将服务器返回的数据（promise对象）让函数返回，可以让组件获取到
   //没有return返回结果即为undefined    
- return request({url:'/api/product/getBaseCategoryList',method:'get'});
+ return request({url:'/product/getBaseCategoryList',method:'get'});
 }
 

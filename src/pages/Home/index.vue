@@ -12,7 +12,6 @@
 </template>
 
 <script>
-import {reqCategoryList} from '@/api';
 //引入子组件
 import TypeNav from "@/pages/Home/TypeNav";
 import ListContainer from "@/pages/Home/ListContainer";
@@ -21,6 +20,7 @@ import Rank from "@/pages/Home/Rank";
 import Like from "@/pages/Home/Like";
 import Floor from "@/pages/Home/Floor";
 import Brand from "@/pages/Home/Brand";
+
 export default {
   name: "",
   components: {
@@ -32,9 +32,6 @@ export default {
     Floor,
     Brand,
   },
-  mounted(){
-    reqCategoryList();
-  }
 };
 </script>
 
