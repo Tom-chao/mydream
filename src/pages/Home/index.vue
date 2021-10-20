@@ -32,6 +32,11 @@ export default {
     Floor,
     Brand,
   },
+  //组件挂载完毕:页面加载完毕，一般在这里发请求
+  created(){
+   //派发action
+   this.$store.dispatch('getCategory');
+  }
 };
 </script>
 
