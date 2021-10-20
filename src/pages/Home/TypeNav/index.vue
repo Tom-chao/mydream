@@ -1,31 +1,59 @@
 <template>
   <div class="type-nav">
     <div class="container">
-     <div  @mouseleave="currentIndex=-1">
-      <h2 class="all">全部商品分类</h2>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId" @mouseenter="changeIndex(index)">
-            <h3 :class="{show:currentIndex===index}">
-              <a href="">{{c1.categoryName}}-{{index}}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
-                <dl class="fore">
-                  <dt>
-                    <a href="">{{c2.categoryName}}</a>
-                  </dt>
-                  <dd>
-                    <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
-                      <a href="">{{c3.categoryName}}</a>
-                    </em>
-                  </dd>
-                </dl>
+      <div @mouseleave="currentIndex = -1">
+        <h2 class="all">全部商品分类</h2>
+        <div class="sort">
+          <!-- 事件的委派更加合理一些 -->
+          <div class="all-sort-list2" @click="goSearch">
+            <div
+              class="item"
+              v-for="(c1, index) in categoryList"
+              :key="c1.categoryId"
+              @mouseenter="changeIndex(index)"
+            >
+              <h3 :class="{ show: currentIndex === index }">
+                <a
+                  :data-categoryName="c1.categoryName"
+                  :data-category1Id="c1.categoryId"
+                  >{{ c1.categoryName }}</a
+                >
+              </h3>
+              <div
+                class="item-list clearfix"
+                :style="{ display: currentIndex === index ? 'block' : 'none' }"
+              >
+                <div
+                  class="subitem"
+                  v-for="(c2, index) in c1.categoryChild"
+                  :key="c2.categoryId"
+                >
+                  <dl class="fore">
+                    <dt>
+                      <a
+                        :data-categoryName="c2.categoryName"
+                        :data-category2Id="c2.categoryId"
+                        >{{ c2.categoryName }}</a
+                      >
+                    </dt>
+                    <dd>
+                      <em
+                        v-for="(c3, index) in c2.categoryChild"
+                        :key="c3.categoryId"
+                      >
+                        <a
+                          :data-categoryName="c3.categoryName"
+                          :data-category3Id="c3.categoryId"
+                          >{{ c3.categoryName }}</a
+                        >
+                      </em>
+                    </dd>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -37,34 +65,66 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-   
     </div>
   </div>
 </template>
 
 <script>
+//按需引入：只是把需要的功能引入进来
+import throttle from "lodash/throttle";
 //vuex辅助函数mapState获取仓库数据
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 export default {
   name: "",
-  data(){
-   return{
-     //索引值的存储
-     currentIndex:-1
-   }
+  data() {
+    return {
+      //索引值的存储
+      currentIndex: -1,
+    };
   },
-  computed:{
-     //mapState辅助函数中的对象右侧函数，注入的实参，是vuex的大仓库的state
-     ...mapState({
-        categoryList:state=>state.home.categoryList
-     })
+  computed: {
+    //mapState辅助函数中的对象右侧函数，注入的实参，是vuex的大仓库的state
+    ...mapState({
+      categoryList: (state) => state.home.categoryList,
+    }),
   },
   methods: {
-    //h3的鼠标移入事件
-    changeIndex(index){
-      //修改索引值
+    //h3的鼠标移入事件:用户行为如果过快，会出现浏览器反应不过来的现象----【用户行为太快】
+    //回调函数里面业务代码很多，卡顿、业务没有完整完成。
+    //节流功能
+    changeIndex: throttle(function (index) {
       this.currentIndex = index;
-    }
+    }, 20),
+    //编程式导航按钮的回调函数
+    goSearch(event) {
+      //点击a标签进行路由跳转：父节点代理的子节点的类型很多 div h3 dd dt em a
+      //通过event可以获取到当前触发事件的节点
+      let nodeElement = event.target;
+      //给a标签添加自定义属性data-categoryName，保证这个节点带data-categoryName，一定是a标签
+      //可以通过节点的dataset属性获取相应节点的自定义属性，返回的是一个对象KV【自定义属性相关的】
+      //如果带有categoryname字段的一定是a标签
+      let { categoryname, category1id, category2id, category3id } = nodeElement.dataset;
+      //执行if语句：只能区分点击的标签是不是a
+      if (categoryname) {
+        //准备路由跳转的参数
+        let location = { name: "search" };
+        let query = { categoryName: categoryname };
+        //一级分类的a标签
+        if (category1id) {
+          query.category1Id = category1id;
+          //二级分类的a标签
+        } else if (category2id) {
+          query.category2Id = category2id;
+          //三级分类a标签
+        } else {
+          query.category3Id = category3id;
+        }
+        //给location对象动态添加一个属性query
+        location.query = query;
+        //路由跳转
+        this.$router.push(location);
+      }
+    },
   },
 };
 </script>
@@ -123,8 +183,15 @@ export default {
             a {
               color: #333;
             }
-            &.show{
-              background:linear-gradient(to right,pink,yellow,cyan,blue,red)
+            &.show {
+              background: linear-gradient(
+                to right,
+                pink,
+                yellow,
+                cyan,
+                blue,
+                red
+              );
             }
           }
 
@@ -181,15 +248,10 @@ export default {
               }
             }
           }
-
-          &:hover {
-            .item-list {
-              display: block;
-            }
-          }
         }
       }
     }
   }
 }
 </style>
+
