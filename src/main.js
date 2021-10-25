@@ -17,9 +17,13 @@ import TypeNav from '@/components/TypeNav';
 //第一参数:组件名字  第二个参数：哪一个组件
 //elementUI注册组件其中有一种写法，就是这种写法
 Vue.component(TypeNav.name,TypeNav);
-
-//为了测试引入Mock是什么打印出来看看
+//引入先关的mock数据的文件【需要代码执行一次】
 import "@/mock/serve";
+//测试mock数据能否获取到[不能的]
+import {reqGetBannerList} from '@/api';
+let result = reqGetBannerList();
+console.log(result);
+
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),

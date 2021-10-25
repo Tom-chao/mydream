@@ -93,6 +93,11 @@
 <script>
 export default {
   name: "",
+  //组件挂载完毕
+  mounted(){
+    //派发action，通知vuex发请求获取数据
+    this.$store.dispatch('getBannerList');
+  }
 };
 </script>
 
