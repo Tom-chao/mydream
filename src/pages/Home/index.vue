@@ -10,10 +10,10 @@
     <Brand></Brand>
   </div>
 </template>
-
 <script>
 //引入子组件
-import TypeNav from "@/pages/Home/TypeNav";
+//发现三级联动在search模块中也使用，咱们将三级联动的组件注册为全局组件
+//下面引入的是局部组件：定义、引入、注册、使用
 import ListContainer from "@/pages/Home/ListContainer";
 import Recommend from "@/pages/Home/Recommend";
 import Rank from "@/pages/Home/Rank";
@@ -22,9 +22,8 @@ import Floor from "@/pages/Home/Floor";
 import Brand from "@/pages/Home/Brand";
 
 export default {
-  name: "",
+  name: "Home",
   components: {
-    TypeNav,
     ListContainer,
     Recommend,
     Rank,

@@ -1,9 +1,10 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="currentIndex = -1">
-        <h2 class="all">全部商品分类</h2>
-        <div class="sort">
+      <div @mouseleave="leaveShow">
+        <h2 class="all" @mouseenter="changeShow">全部商品分类</h2>
+        <!-- 三级联动结构 -->
+        <div class="sort" v-show="show">
           <!-- 事件的委派更加合理一些 -->
           <div class="all-sort-list2" @click="goSearch">
             <div
@@ -56,7 +57,7 @@
         </div>
       </div>
       <nav class="nav">
-        <a href="###">服装城</a>
+        <a>服装城</a>
         <a href="###">美妆馆</a>
         <a href="###">尚品汇超市</a>
         <a href="###">全球购</a>
@@ -75,11 +76,13 @@ import throttle from "lodash/throttle";
 //vuex辅助函数mapState获取仓库数据
 import { mapState } from "vuex";
 export default {
-  name: "",
+  name: "TypeNav",
   data() {
     return {
       //索引值的存储
       currentIndex: -1,
+      //控制三级联动的显示与隐藏的
+      show:true
     };
   },
   computed: {
@@ -103,7 +106,8 @@ export default {
       //给a标签添加自定义属性data-categoryName，保证这个节点带data-categoryName，一定是a标签
       //可以通过节点的dataset属性获取相应节点的自定义属性，返回的是一个对象KV【自定义属性相关的】
       //如果带有categoryname字段的一定是a标签
-      let { categoryname, category1id, category2id, category3id } = nodeElement.dataset;
+      let { categoryname, category1id, category2id, category3id } =
+        nodeElement.dataset;
       //执行if语句：只能区分点击的标签是不是a
       if (categoryname) {
         //准备路由跳转的参数
@@ -125,7 +129,32 @@ export default {
         this.$router.push(location);
       }
     },
+    //修改show的属性的方法（鼠标进入）
+    changeShow(){
+      //鼠标移上去三级联动需要隐藏
+      //下面代码只有在serach模块的时候，才会执行
+      if(this.$route.path!="/home"){
+        this.show = true;
+      }
+    },
+    //修改show的属性的方法（鼠标离开）
+    leaveShow(){
+      //鼠标移出的时候，三级联动的一级菜单没有背景颜色
+      this.currentIndex  = -1;
+      //需要把三级联动展示出来
+      if(this.$route.path!='/home'){
+        this.show = false;
+      }
+    }
   },
+  //组件挂载完毕
+  //home与search路由组件跳转的时候:相应的组件（销毁、重新创建），子组件也需要【销毁创建的】
+  mounted(){
+   //每一个路由跳转的时候，进行一次判断，如果【不是home路由】即为search
+    if(this.$route.path!='/home'){
+       this.show = false;
+    }
+  }
 };
 </script>
 

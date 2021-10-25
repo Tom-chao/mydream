@@ -1,14 +1,13 @@
 <template>
   <div>
-       <h1>params的参数:{{$route.params.keyWord}}----------{{keyWord}}</h1>
-       <h1>query的参数:{{$route.query.k}}----------{{k}}</h1>
+      <TypeNav></TypeNav>
   </div>
 </template>
 
 <script>
+//三级联动目前是全局组件，不需要引入与components注册，可以直接使用
 export default {
   name: '',
-  props:['keyWord',"k"]
 }
 </script>
 
