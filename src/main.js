@@ -17,6 +17,9 @@ import TypeNav from '@/components/TypeNav';
 //第一参数:组件名字  第二个参数：哪一个组件
 //elementUI注册组件其中有一种写法，就是这种写法
 Vue.component(TypeNav.name,TypeNav);
+
+//为了测试引入Mock是什么打印出来看看
+import "@/mock/serve";
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),
