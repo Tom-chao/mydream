@@ -3,58 +3,62 @@
     <div class="container">
       <div @mouseleave="leaveShow">
         <h2 class="all" @mouseenter="changeShow">全部商品分类</h2>
-        <!-- 三级联动结构 -->
-        <div class="sort" v-show="show">
-          <!-- 事件的委派更加合理一些 -->
-          <div class="all-sort-list2" @click="goSearch">
-            <div
-              class="item"
-              v-for="(c1, index) in categoryList"
-              :key="c1.categoryId"
-              @mouseenter="changeIndex(index)"
-            >
-              <h3 :class="{ show: currentIndex === index }">
-                <a
-                  :data-categoryName="c1.categoryName"
-                  :data-category1Id="c1.categoryId"
-                  >{{ c1.categoryName }}</a
-                >
-              </h3>
+        <!-- 三级联动结构||过渡动画效果-->
+        <transition name="sort">
+          <div class="sort" v-show="show">
+            <!-- 事件的委派更加合理一些 -->
+            <div class="all-sort-list2" @click="goSearch">
               <div
-                class="item-list clearfix"
-                :style="{ display: currentIndex === index ? 'block' : 'none' }"
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.categoryId"
+                @mouseenter="changeIndex(index)"
               >
+                <h3 :class="{ show: currentIndex === index }">
+                  <a
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                </h3>
                 <div
-                  class="subitem"
-                  v-for="(c2, index) in c1.categoryChild"
-                  :key="c2.categoryId"
+                  class="item-list clearfix"
+                  :style="{
+                    display: currentIndex === index ? 'block' : 'none',
+                  }"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a
-                        :data-categoryName="c2.categoryName"
-                        :data-category2Id="c2.categoryId"
-                        >{{ c2.categoryName }}</a
-                      >
-                    </dt>
-                    <dd>
-                      <em
-                        v-for="(c3, index) in c2.categoryChild"
-                        :key="c3.categoryId"
-                      >
+                  <div
+                    class="subitem"
+                    v-for="(c2, index) in c1.categoryChild"
+                    :key="c2.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
                         <a
-                          :data-categoryName="c3.categoryName"
-                          :data-category3Id="c3.categoryId"
-                          >{{ c3.categoryName }}</a
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <dd>
+                        <em
+                          v-for="(c3, index) in c2.categoryChild"
+                          :key="c3.categoryId"
+                        >
+                          <a
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a>服装城</a>
@@ -82,7 +86,7 @@ export default {
       //索引值的存储
       currentIndex: -1,
       //控制三级联动的显示与隐藏的
-      show:true
+      show: true,
     };
   },
   computed: {
@@ -130,31 +134,31 @@ export default {
       }
     },
     //修改show的属性的方法（鼠标进入）
-    changeShow(){
+    changeShow() {
       //鼠标移上去三级联动需要隐藏
       //下面代码只有在serach模块的时候，才会执行
-      if(this.$route.path!="/home"){
+      if (this.$route.path != "/home") {
         this.show = true;
       }
     },
     //修改show的属性的方法（鼠标离开）
-    leaveShow(){
+    leaveShow() {
       //鼠标移出的时候，三级联动的一级菜单没有背景颜色
-      this.currentIndex  = -1;
+      this.currentIndex = -1;
       //需要把三级联动展示出来
-      if(this.$route.path!='/home'){
+      if (this.$route.path != "/home") {
         this.show = false;
       }
-    }
+    },
   },
   //组件挂载完毕
   //home与search路由组件跳转的时候:相应的组件（销毁、重新创建），子组件也需要【销毁创建的】
-  mounted(){
-   //每一个路由跳转的时候，进行一次判断，如果【不是home路由】即为search
-    if(this.$route.path!='/home'){
-       this.show = false;
+  mounted() {
+    //每一个路由跳转的时候，进行一次判断，如果【不是home路由】即为search
+    if (this.$route.path != "/home") {
+      this.show = false;
     }
-  }
+  },
 };
 </script>
 
@@ -279,6 +283,23 @@ export default {
           }
         }
       }
+    }
+    //过渡动画的样式
+    //如果transiton没有name属性 ： v-enter   v-enter-to v-enter-active
+    //如果transition有name属性  ： name的属性值-enter  name的属性值-enter-to
+    //进入状态：开始阶段
+    .sort-enter{
+      height: 0px;
+      transform: rotate(0deg);
+    }
+    //进入状态：结束阶段
+    .sort-enter-to{
+         height: 461px;
+         transform: rotate(360deg);
+    }
+    //定义过渡动画的时间等等
+    .sort-enter-active{
+      transition: all .2s;
     }
   }
 }

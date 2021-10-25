@@ -4,6 +4,13 @@ import App from './App.vue'
 import router from '@/router';
 import store from '@/store';
 
+//这里是入口文件，也是程序最先执行的地方，在TypeNav组件使用之前，向服务器发起一次请求，获取三级联动的数据
+//存储于vuex，当然当TypeNav在使用仓库中的数据的时候（数据早已经有了），TypeNav可以获取数据【展示数据】
+//当然书写这里请求只会发一次，当然可以进行性能优化
+//store.dispatch('getCategory')
+
+
+
 //注册全局组件---三级联动
 import TypeNav from '@/components/TypeNav';
 //全局组件注册方式:

@@ -19,6 +19,13 @@ export default {
     Header,
     Footer,
   },
+  //根组件执行执行一次，因此mounted执行一次
+  mounted(){
+    //在根组件渲染出来的时候，向服务器派发action，通过Vuex向服务器发请求，获取三级联动的数据
+    //将来给TypeNav（vuex）提供数据
+    //写在这里的好处:1,请求只会发一次   2：在typeNav使用数据之前（数据在Vuex中已经存在，且只是向服务器发起一次请求）
+    this.$store.dispatch('getCategory');
+  }
 };
 </script>
 <style scoped>
