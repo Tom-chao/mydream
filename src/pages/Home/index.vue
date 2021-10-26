@@ -34,6 +34,9 @@ export default {
   },
   //Home组件的组件挂载完毕，生命周期函数，通过Vuex发请求，获取Floor组件数据
   mounted(){
+    //父组件的生命周期函数（mounted），在这里通知Vuex发请求【获取Floor组件需要的数据】
+    //由于Home父组件的mounted中通知Vuex发请求，请求回来以后，Floor组件才遍历出来。
+    //当父组件的mounted执行的时候，Floor组件可能没有遍历完毕
     this.$store.dispatch('getFloorList');
   },
   //计算属性

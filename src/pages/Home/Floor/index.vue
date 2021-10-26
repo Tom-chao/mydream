@@ -2,11 +2,15 @@
   <div class="floor">
     <div class="py-container">
       <div class="title clearfix">
-        <h3 class="fl">{{floorInfo.name}}</h3>
+        <h3 class="fl">{{ floorInfo.name }}</h3>
         <div class="fr">
           <ul class="nav-tabs clearfix">
-            <li :class="{active:index===0}" v-for="(nav,index) in floorInfo.navList" :key="index">
-              <a href="#tab1" data-toggle="tab">{{nav.text}}</a>
+            <li
+              :class="{ active: index === 0 }"
+              v-for="(nav, index) in floorInfo.navList"
+              :key="index"
+            >
+              <a href="#tab1" data-toggle="tab">{{ nav.text }}</a>
             </li>
           </ul>
         </div>
@@ -16,25 +20,19 @@
           <div class="floor-1">
             <div class="blockgary">
               <ul class="jd-list">
-                <li v-for="(keyword,index) in floorInfo.keywords" :key="index" :style="{color:index%2!=0?'cyan':'black'}">{{keyword}}</li>
+                <li
+                  v-for="(keyword, index) in floorInfo.keywords"
+                  :key="index"
+                  :style="{ color: index % 2 != 0 ? 'cyan' : 'black' }"
+                >
+                  {{ keyword }}
+                </li>
               </ul>
               <img :src="floorInfo.imgUrl" />
             </div>
             <div class="floorBanner">
               <!-- 轮播图的地方 -->
-              <div class="swiper-container" id="floor1Swiper">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img src="./images/floor-1-b01.png" />
-                  </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
-
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+              <Carousel :bannerList="floorInfo.carouselList"/>
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
@@ -68,7 +66,7 @@
 export default {
   name: "",
   //接受父组件给的数据，书写方式有两种
-  props:['floorInfo']
+  props: ["floorInfo"],
 };
 </script>
 

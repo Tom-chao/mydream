@@ -2,24 +2,8 @@
   <div class="list-container">
     <div class="sortList clearfix">
       <div class="center">
-        <!--banner轮播-->
-        <div class="swiper-container" ref="mySwiper">
-          <div class="swiper-wrapper">
-            <div
-              class="swiper-slide"
-              v-for="(item, index) in bannerList"
-              :key="item.id"
-            >
-              <img :src="item.imgUrl" />
-            </div>
-          </div>
-          <!-- 如果需要分页器 -->
-          <div class="swiper-pagination"></div>
-
-          <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+        <!--全局轮播图组件-->
+        <Carousel :bannerList="bannerList"/>
       </div>
       <div class="right">
         <div class="news">
@@ -97,8 +81,6 @@
 <script>
 //vuex辅助函数，让组件获取仓库的数据
 import { mapState } from "vuex";
-//第一步:引入相关的swiper||样式
-import Swiper from "swiper";
 export default {
   name: "",
   //组件挂载完毕
@@ -109,47 +91,13 @@ export default {
     //当mounted已经执行了，组件才通知vuex向服务器发请求，获取数据，动态展示数据
     //也就是说：当mounted执行完毕了，在swiper的结构才完整（先后顺序是有问题的）
     this.$store.dispatch("getBannerList");
+    
   },
   //计算属性
   computed: {
     ...mapState({
       bannerList: (state) => state.home.bannerList,
     }),
-  },
-  //监听属性:写法有两种
-  watch: {
-    //监听bannerList变化
-    bannerList(newValue, oldValue) {
-      //如果这个监听属性函数执行了,已经获取到了服务器的数据了，页面中的结构有可能已经有了
-      //'有可能',你确实数据有了,v-for需要遍历，它也需要时间的，把虚拟DOM转换为真是DOM【消耗时间】
-      //在初始化swiper实例：现在这种写法，确实不行【结构没有完整，v-for没有执行完毕】
-      //在下次DOM更新, 循环结束之后,执行延迟回调
-      this.$nextTick(() => {
-        //回调里面写代码的时候:1:服务器数据回来了 2:v-for执行完毕，结构已经有了
-        new Swiper(this.$refs.mySwiper, {
-          loop: false,
-          // 如果需要分页器
-          pagination: {
-            el: ".swiper-pagination",
-            //分页器小球点击的时候切换图片
-            clickable: true,
-          },
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          //自动播放
-          // autoplay: {
-          //   delay: 1000,
-          //   stopOnLastSlide: false,
-          //   disableOnInteraction: true,
-          // },
-          //切换效果：3D
-        //  effect : 'cube',
-        });
-      });
-    },
   },
 };
 </script>

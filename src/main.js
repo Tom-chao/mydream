@@ -17,8 +17,11 @@ Vue.component(TypeNav.name,TypeNav);
 //引入先关的mock数据的文件【需要代码执行一次】
 import "@/mock/serve";
 
-//引入swiper需要使用的样式[项目当中用到swiper的地方很多，样式引入一次即可]
+//引入swiper需要使用的样式[项目当中用到swiper的地方很多，样式引入一次即可
 import "swiper/css/swiper.css"
+//注册全局的轮播图组件
+import Carousel from '@/components/Carousel';
+Vue.component( Carousel.name,Carousel);
 
 //创建Vue类的一个实例
 new Vue({
