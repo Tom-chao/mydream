@@ -9,7 +9,8 @@ export const reqCategoryList = ()=>{
   //没有return返回结果即为undefined    
  return request({url:'/product/getBaseCategoryList',method:'get'});
 }
-
 //获取banner数据的接口函数
 export const reqGetBannerList = ()=>mockRequest({url:'/banner',method:'get'});
 
+//获取Floor(楼层)数据接口的函数
+export const reqGetFloorList = ()=>mockRequest({url:`/floor`,method:'get'});

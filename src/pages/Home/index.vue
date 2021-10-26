@@ -5,8 +5,8 @@
     <Recommend></Recommend>
     <Rank></Rank>
     <Like></Like>
-    <Floor></Floor>
-    <Floor></Floor>
+    <!--Home父组件：通过v-for遍历生成多个Floor组件-->
+    <Floor v-for="(floor,index) in floorList" :key="floor.id" :floorInfo="floor"></Floor>
     <Brand></Brand>
   </div>
 </template>
@@ -20,7 +20,8 @@ import Rank from "@/pages/Home/Rank";
 import Like from "@/pages/Home/Like";
 import Floor from "@/pages/Home/Floor";
 import Brand from "@/pages/Home/Brand";
-
+//引入辅助函数
+import {mapState} from 'vuex';
 export default {
   name: "Home",
   components: {
@@ -31,10 +32,15 @@ export default {
     Floor,
     Brand,
   },
-  //组件挂载完毕:页面加载完毕，一般在这里发请求
+  //Home组件的组件挂载完毕，生命周期函数，通过Vuex发请求，获取Floor组件数据
   mounted(){
-   //派发action,获取三级联动的数据
-  //  this.$store.dispatch('getCategory');
+    this.$store.dispatch('getFloorList');
+  },
+  //计算属性
+  computed:{
+    ...mapState({
+       floorList:state=>state.home.floorList
+    })
   }
 };
 </script>

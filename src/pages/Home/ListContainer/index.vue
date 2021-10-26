@@ -140,13 +140,13 @@ export default {
             prevEl: ".swiper-button-prev",
           },
           //自动播放
-          autoplay: {
-            delay: 1000,
-            stopOnLastSlide: false,
-            disableOnInteraction: true,
-          },
+          // autoplay: {
+          //   delay: 1000,
+          //   stopOnLastSlide: false,
+          //   disableOnInteraction: true,
+          // },
           //切换效果：3D
-         effect : 'cube',
+        //  effect : 'cube',
         });
       });
     },
