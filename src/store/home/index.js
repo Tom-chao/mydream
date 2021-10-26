@@ -16,6 +16,7 @@ const mutations = {
     }
     ,
     GETBANNERLIST(state,bannerList){
+         console.log('修改仓库的数据')
         state.bannerList = bannerList;
     }
 };
@@ -34,6 +35,7 @@ const actions = {
         //服务器返回banner数据--->存储于vuex当中
         let result = await reqGetBannerList();
         if(result.code==200){
+            console.log('vuex向服务器发请求，获取数据');
             commit("GETBANNERLIST",result.data);
         }
     }

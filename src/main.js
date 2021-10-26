@@ -8,9 +8,6 @@ import store from '@/store';
 //存储于vuex，当然当TypeNav在使用仓库中的数据的时候（数据早已经有了），TypeNav可以获取数据【展示数据】
 //当然书写这里请求只会发一次，当然可以进行性能优化
 //store.dispatch('getCategory')
-
-
-
 //注册全局组件---三级联动
 import TypeNav from '@/components/TypeNav';
 //全局组件注册方式:
@@ -19,10 +16,9 @@ import TypeNav from '@/components/TypeNav';
 Vue.component(TypeNav.name,TypeNav);
 //引入先关的mock数据的文件【需要代码执行一次】
 import "@/mock/serve";
-//测试mock数据能否获取到[不能的]
-import {reqGetBannerList} from '@/api';
-let result = reqGetBannerList();
-console.log(result);
+
+//引入swiper需要使用的样式[项目当中用到swiper的地方很多，样式引入一次即可]
+import "swiper/css/swiper.css"
 
 //创建Vue类的一个实例
 new Vue({
@@ -31,4 +27,4 @@ new Vue({
   router,
   //注册仓库，给每一个组件的身上添加$store属性
   store
-}).$mount('#app')
+}).$mount('#app');

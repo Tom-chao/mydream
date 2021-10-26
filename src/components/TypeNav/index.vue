@@ -154,7 +154,6 @@ export default {
   //组件挂载完毕
   //home与search路由组件跳转的时候:相应的组件（销毁、重新创建），子组件也需要【销毁创建的】
   mounted() {
-    console.log(2222222222222);
     //每一个路由跳转的时候，进行一次判断，如果【不是home路由】即为search
     if (this.$route.path != "/home") {
       this.show = false;

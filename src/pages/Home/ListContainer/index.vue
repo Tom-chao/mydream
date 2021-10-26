@@ -3,10 +3,14 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container" ref="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
+            <div
+              class="swiper-slide"
+              v-for="(item, index) in bannerList"
+              :key="item.id"
+            >
+              <img :src="item.imgUrl" />
             </div>
           </div>
           <!-- 如果需要分页器 -->
@@ -91,13 +95,48 @@
 </template>
 
 <script>
+//vuex辅助函数，让组件获取仓库的数据
+import { mapState } from "vuex";
+//第一步:引入相关的swiper||样式
+import Swiper from "swiper";
 export default {
   name: "",
+  data(){
+    return {
+       msg:'收集数据',
+       a:1
+    }
+  },
   //组件挂载完毕
-  mounted(){
-    //派发action，通知vuex发请求获取数据
-    this.$store.dispatch('getBannerList');
-  }
+  mounted() {
+    //组件挂载完毕(正常人想的是：结构已经完整了)
+    //当mounted执行的时候，我才通知Vuex向服务器发请求，获取轮播图的数据，进行动态展示
+    //为什么初始化swiper实例在这里书写不可以的，当mounted执行的时候，页面中的结构还未完整
+    //当mounted已经执行了，组件才通知vuex向服务器发请求，获取数据，动态展示数据
+    //也就是说：当mounted执行完毕了，在swiper的结构才完整（先后顺序是有问题的）
+    this.$store.dispatch("getBannerList");
+    //搞一个延迟器
+    // setTimeout(() => {
+    //   new Swiper(this.$refs.mySwiper, {
+    //     loop: false,
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //     },
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
+    //   });
+    // }, 2000);
+  },
+  //计算属性
+  computed: {
+    ...mapState({
+      bannerList: (state) => state.home.bannerList,
+    }),
+  },
 };
 </script>
 

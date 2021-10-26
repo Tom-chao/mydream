@@ -10,6 +10,6 @@ export const reqCategoryList = ()=>{
  return request({url:'/product/getBaseCategoryList',method:'get'});
 }
 
-//通过mockRequest（axios实例）获取相应的mock数据
+//获取banner数据的接口函数
 export const reqGetBannerList = ()=>mockRequest({url:'/banner',method:'get'});
 
