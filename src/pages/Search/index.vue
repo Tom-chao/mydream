@@ -158,13 +158,10 @@ export default {
    //生命周期函数
    beforeMount(){
      //在发请求之前，把携带给服务器参数整理好，携带服务器
-    this.searchParams.category1Id = this.$route.query.category1Id;
-    this.searchParams.category2Id = this.$route.query.category2Id;
-    this.searchParams.category3Id = this.$route.query.category3Id;
-    this.searchParams.categoryName = this.$route.query.categoryName;
-    this.searchParams.keyword = this.$route.params.keyword;
-   }
-   ,
+     //当路由跳转的时候，把home传递过来的query参数与params参数赋值给searchParams对象
+     //Object.assin()合并对象
+     Object.assign(this.searchParams,this.$route.query,this.$route.params);
+   },
   //组件挂载完毕发起一次请求
   mounted() {
     this.getSearchList();
@@ -181,6 +178,21 @@ export default {
   },
   computed: {
     ...mapGetters(["goodsList"]),
+  },
+  //监听路由的变化
+  watch: {
+      //组件实例身上是有$route这个属性的【包含：路由信息】
+      //只要路由发生变化，立即在向服务器发请求
+      $route(){
+         //清除上一次发请求的id
+         this.searchParams.category1Id = undefined;
+         this.searchParams.category2Id =undefined;
+         this.searchParams.category3Id = undefined;
+         //先收集最新的搜索条件（再次整理参数），在想服务器发请求
+         Object.assign(this.searchParams,this.$route.query,this.$route.params);
+         //再次发请求
+         this.getSearchList();
+      }
   },
 };
 </script>
