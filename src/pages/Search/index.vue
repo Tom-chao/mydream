@@ -330,10 +330,23 @@
   import SearchSelector from './SearchSelector/SearchSelector'
   export default {
     name: 'Search',
-
     components: {
       SearchSelector
-    }
+    },
+    //组件挂载完毕发起一次请求
+    mounted(){
+     this.getSearchList();
+    },
+    methods: {
+      //获取搜索产品的数据
+      getSearchList() {
+        //派发action通知服务器发请求
+        //目前而言：组件通知服务器发请求，获取数据，携带一个空对象
+        //当然将来这个空对象进行替换，替换我响应数据（收集用户选择调价带给服务器）
+        //第二个参数：作为getSearchList这个action的第二个形参
+        this.$store.dispatch('getSearchList',{});
+      },
+    },
   }
 </script>
 

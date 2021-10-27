@@ -22,7 +22,6 @@ import "swiper/css/swiper.css"
 //注册全局的轮播图组件
 import Carousel from '@/components/Carousel';
 Vue.component( Carousel.name,Carousel);
-
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),

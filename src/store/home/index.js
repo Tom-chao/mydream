@@ -22,7 +22,6 @@ const mutations = {
     },
     GETFLOORLIST: (state, floorList) => {
         state.floorList = floorList;
-        console.log('我在修改仓库中的floor的数据')
     }
 };
 //actions:可以处理dispatch派发action地方，这里可以书写你的业务逻辑：for、if、异步语句等等
@@ -48,7 +47,6 @@ const actions = {
         let result = await reqGetFloorList();
         if (result.code == 200) {
             commit('GETFLOORLIST', result.data);
-            console.log('home通知我向服务器发请求，获取Floor数据');
         }
     }
 
