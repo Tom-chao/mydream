@@ -25,6 +25,11 @@ Vue.component( Carousel.name,Carousel);
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),
+  beforeCreate(){
+    //配置全局事件总线
+    Vue.prototype.$bus = this;
+  }
+  ,
   //注册路由,给组件的身上添加了$router与$route两个属性
   router,
   //注册仓库，给每一个组件的身上添加$store属性

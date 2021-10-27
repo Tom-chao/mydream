@@ -12,15 +12,15 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 面包屑可能有也可能没有 -->
+            <!-- 产品名字的按钮 -->
+            <li class="with-x" v-show="searchParams.categoryName">{{searchParams.categoryName}}<i @click="clearName">×</i></li>
+            <!-- 用户搜索关键字的按钮 -->
+            <li class="with-x" v-show="searchParams.keyword">{{searchParams.keyword}}<i @click="clearKeyword">×</i></li>
           </ul>
         </div>
         <!--selector:属于search组件的一个子组件-->
         <SearchSelector />
-
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -175,6 +175,30 @@ export default {
       //第二个参数：作为getSearchList这个action的第二个形参
       this.$store.dispatch("getSearchList", this.searchParams);
     },
+    //清除产品的名字
+    clearName(){
+      //把数据清空
+      this.searchParams.categoryName = '';
+      //修改URL:当前search模块跳转到search，只不过不在携带query参数，
+      //路由发生变化了,watch在监听路由的变化，路由发生变化，会再次发请求的
+      //清除路由当中的query参数，如果存在params参数应该带着，不应该删除
+      if(this.$route.params){
+        this.$router.push({name:'search',params:this.$route.params});
+      }
+    }
+    ,
+    //清除关键字
+    clearKeyword(){
+      //清除关键字的数据
+      this.searchParams.keyword = '';
+      //路由跳转自己跳自己
+      if(this.$route.query){
+        this.$router.push({name:'search',query:this.$route.query});
+      }
+      //通知兄弟组件，把关键字清除----全局事件总线$bus
+      //通知
+      this.$bus.$emit("changeKeyword");
+    }
   },
   computed: {
     ...mapGetters(["goodsList"]),
