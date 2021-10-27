@@ -110,8 +110,7 @@ export default {
       //给a标签添加自定义属性data-categoryName，保证这个节点带data-categoryName，一定是a标签
       //可以通过节点的dataset属性获取相应节点的自定义属性，返回的是一个对象KV【自定义属性相关的】
       //如果带有categoryname字段的一定是a标签
-      let { categoryname, category1id, category2id, category3id } =
-        nodeElement.dataset;
+      let { categoryname, category1id, category2id, category3id } = nodeElement.dataset;
       //执行if语句：只能区分点击的标签是不是a
       if (categoryname) {
         //准备路由跳转的参数
@@ -127,10 +126,15 @@ export default {
         } else {
           query.category3Id = category3id;
         }
-        //给location对象动态添加一个属性query
-        location.query = query;
-        //路由跳转
-        this.$router.push(location);
+        //路由跳转之前：看一下有没有params参数，如果有params参数需要携带给search
+        if(this.$route.params){
+         //query参数
+         location.query = query;
+         //params
+         location.params = this.$route.params;
+         //如有有params参数也需要携带给search模块
+         this.$router.push(location);
+        }
       }
     },
     //修改show的属性的方法（鼠标进入）

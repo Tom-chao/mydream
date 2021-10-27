@@ -46,7 +46,7 @@ export default new VueRouter({
           },
           {
                //代表params参数可有可无，务必要加上?
-               path: '/search/:keyWord?',
+               path: '/search/:keyword?',
                component: Search,
                meta: { show: true },
                //命名路由

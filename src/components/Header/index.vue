@@ -37,7 +37,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
-            v-model="keyWord"
+            v-model="keyword"
           />
           <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
             搜索
@@ -54,39 +54,23 @@ export default {
   data(){
     return {
       //收集表单数据---关键字的
-      keyWord:''  
+      keyword:''  
     }
   },
   methods:{
-    //搜索按钮的回调函数
+    //搜索按钮的回调函数,点击的时候，home跳转到search
     goSearch(){
-      //路由跳转【编程式导航】
-      //路由的跳转:声明式导航（router-link）、编程式导航（push|replace），编程式导航跟好一些，因为可以书写自己的业务逻辑
-      //路由传参:query参数 、params参数   
-      //区别:params参数，作为URL当中一部分  http://127.0.0.1/home/手机  ---------路由需要占位
-      //query参数，并非URL当中一部分，类似于ajax当中query参数   http://127.0.0.1/home?a=1&b=2
-      /*******************************************************************************************************/
-      //路由传参的写法：学习几种
-      //1：字符串的写法
-      // this.$router.push("/search/" + this.keyWord+"?k="+this.keyWord.toUpperCase());
-      //2:模板字符串
-      // this.$router.push(`/search/${this.keyWord}?k=${this.keyWord.toUpperCase()}`);
-      //3:对象写法
-      this.$router.push({name:"search",params:{keyWord:this.keyWord},query:{k:this.keyWord.toUpperCase()}});
-  
-      //push方法在vueRouter.prototype
-
-      //面试题1
-      //对象的写法的时候（path）不能结合params参数一起使用
-      // this.$router.push({path:'/search',params:{keyWord:this.keyWord}});
-
-
-      //面试题2：
-      //2:如何指定params参数可传可不传? 
-      // this.$router.push({name:'search',params:{keyWord:''||undefined},query:{k:this.keyWord.toUpperCase()}});
-      //http://127.0.0.1:8080/#/search/abc?k=ABC
-      //http://127.0.0.1:8080/#/search/?k=ABC
-
+      //当年点击搜索按钮的时候，携带的是params参数，params参数可传递|不传递--->?
+      //如果可传递|不传递，万一传递的是空字符串，会出现路径问题，
+      //判断：点击搜索按钮之前，稍微判断一下是否有query参数，如果有query参数，携带给search
+      //if判断你可以写，也可以不书写，判断没有任何意义【空对象隐式转换为布尔值真】
+      if(this.$route.query){
+        //本身点击搜索按钮，当年只是携带params，如果路径当中存在query参数，是需要把query参数页携带给search
+        let location = {name:'search',params:{keyword:this.keyword||undefined}};
+        location.query = this.$route.query;
+        this.$router.push(location)
+      }
+     
     }
   },
 };
