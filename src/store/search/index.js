@@ -23,8 +23,16 @@ const actions = {
         }
     }
 };
-//getters：计算属性
-const getters = {};
+//getters:计算属性（基础课程的时候）
+//getters:作用,getters是为了简化数据而生（为了组件获取数据方便而生）
+const getters = {
+     //搜索模块【商品展示的数据】
+     //state：它是当前小仓库（search）的state数据，没有home仓库中的state
+     //只是当前仓库的state
+     goodsList(state){
+         return state.searchList.goodsList;
+     }
+};
 
 export default {
     state,
