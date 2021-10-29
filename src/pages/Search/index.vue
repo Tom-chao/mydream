@@ -31,11 +31,11 @@
             <div class="navbar-inner filter">
               <ul class="sui-nav">
                 <!-- 拥有类名active：会将背景颜色变为红色 -->
-                <li :class="{active:isComprehensive}">
-                  <a>综合</a>
+                <li :class="{active:isComprehensive}" @click="changeOrder('1')">
+                  <a>综合<span v-show="isComprehensive" class="iconfont" :class="{'icon-long-arrow-down':isDesc,'icon-long-arrow-up':isAsc}"></span></a>
                 </li>
-                <li :class="{active:isPrice}">
-                  <a>价格</a>
+                <li :class="{active:isPrice}" @click="changeOrder('2')">
+                  <a>价格<span v-show="isPrice" class="iconfont" :class="{'icon-long-arrow-down':isDesc,'icon-long-arrow-up':isAsc}"></span></a>
                 </li>
               </ul>
             </div>
@@ -141,7 +141,7 @@ export default {
         order: "1:desc", //携带给服务器参数order--->初始值"1:desc"[综合降序]
         pageNo: 1, //获取第几页的数据，默认即为第一个的数据
         pageSize:3, //每一页需要展示多少条数据
- 
+
       },
     };
   },
@@ -220,6 +220,29 @@ export default {
           }
         */
        this.searchParams.props.indexOf(prop)==-1&&this.searchParams.props.push(prop)&&this.getSearchList()
+    },
+    //排序的回调
+    changeOrder(flag){
+        // console.log('用户最新点击的按钮的标记',flag);
+       //flag形参:接受的是一个字符串【1、2】，取决于用户点击的是综合（1）、价格（2）
+       //flag这个形参是用户点击的那个标记参数1|2
+       //1:先获取order初始值：综合、价格 升序、降序
+       let originFlag = this.searchParams.order.split(":")[0];
+       let originSort = this.searchParams.order.split(":")[1];
+       //创建一个新的排序方式
+       let newOrder = ''
+       //判断：用户点击的是带背景颜色按钮(谁有背景颜色点击的就是谁)
+       if(originFlag==flag){
+          newOrder = `${originFlag}:${originSort=='desc'?'asc':'desc'}`;
+       }else{
+         //判断：点击的是不带背景颜色的按钮
+         newOrder = `${flag}:desc`;
+       }
+
+       //重新整理参数
+       this.searchParams.order = newOrder;
+       this.getSearchList();
+  
     }
   },
   computed: {
@@ -228,8 +251,17 @@ export default {
     isComprehensive(){
         return this.searchParams.order.indexOf('1')!=-1;
     },
+    //是不是价格
     isPrice(){
       return this.searchParams.order.indexOf('2')!=-1;
+    },
+    //是不是降序
+    isDesc(){
+      return this.searchParams.order.indexOf('desc')!=-1;
+    },
+    //是不是升序
+    isAsc(){
+       return this.searchParams.order.indexOf('asc')!=-1;
     }
   },
   //监听路由的变化
