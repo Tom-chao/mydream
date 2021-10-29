@@ -20,7 +20,7 @@
           </ul>
         </div>
         <!--selector:属于search组件的一个子组件-->
-        <SearchSelector />
+        <SearchSelector @getTradeMarkInfo="getTradeMarkInfo"/>
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -198,6 +198,13 @@ export default {
       //通知兄弟组件，把关键字清除----全局事件总线$bus
       //通知
       this.$bus.$emit("changeKeyword");
+    },
+    //获取自定义事件（子组件给父组件）品牌信息
+    getTradeMarkInfo(trademark){
+       //整理参数
+       this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
+       //在发请求
+       this.getSearchList();
     }
   },
   computed: {

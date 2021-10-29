@@ -31,6 +31,14 @@ const getters = {
      //只是当前仓库的state
      goodsList(state){
          return state.searchList.goodsList;
+     },
+     //品牌数据
+     tradeMarkList(state){
+       return state.searchList.trademarkList;
+     },
+     //平台属性
+     attrsList(){
+         return state.searchList.attrsList;
      }
 };
 
