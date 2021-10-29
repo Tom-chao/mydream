@@ -17,10 +17,14 @@
             <li class="with-x" v-show="searchParams.categoryName">{{searchParams.categoryName}}<i @click="clearName">×</i></li>
             <!-- 用户搜索关键字的按钮 -->
             <li class="with-x" v-show="searchParams.keyword">{{searchParams.keyword}}<i @click="clearKeyword">×</i></li>
+            <!-- 品牌的面包屑:字符串才有split方法-->
+            <li class="with-x" v-show="searchParams.trademark">{{searchParams.trademark.split(":")[1]}}<i @click="clearTradeMark">×</i></li>
+            <!-- 展示平台属性的面包屑：平台属性存储于数组里面，可能有多个平台属性，一次需要遍历 -->
+            <li class="with-x" v-for="(prop,index) in searchParams.props" :key="index">{{prop.split(":")[1]}}<i>×</i></li>
           </ul>
         </div>
         <!--selector:属于search组件的一个子组件-->
-        <SearchSelector @getTradeMarkInfo="getTradeMarkInfo"/>
+        <SearchSelector @getTradeMarkInfo="getTradeMarkInfo" @getAttrInfo="getAttrInfo"/>
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -201,10 +205,32 @@ export default {
     },
     //获取自定义事件（子组件给父组件）品牌信息
     getTradeMarkInfo(trademark){
-       //整理参数
+       //整理参数:参数格式切记参考文档
        this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`;
        //在发请求
        this.getSearchList();
+    },
+    //清除品牌面包屑
+    clearTradeMark(){
+      //携带给服务器参数：清除  
+      this.searchParams.trademark = '';
+      this.getSearchList();
+    },
+    //获取自定义事件（字组件给父组件）平台属性信息
+    getAttrInfo(attr,attrValue){
+        //整理参数:['属性ID:属性值:属性名'],携带给服务器参数【看文档】
+        //对于前端工程师而言。收集数据属于基本功
+        let prop = `${attr.attrId}:${attrValue}:${attr.attrName}`;
+        //添加到searchParams.props数组里面携带给服务器
+        //需要进行判断：判断数组当中是否已包含这个属性值，如果有不需要添加，没有在添加 
+        //发请求(属性值相同的情况下不在发请求，属性不同在发请求)
+        /*
+          if( this.searchParams.props.indexOf(prop)==-1){
+             this.searchParams.props.push(prop);
+              this.getSearchList();
+          }
+        */
+       this.searchParams.props.indexOf(prop)==-1&&this.searchParams.props.push(prop)&&this.getSearchList()
     }
   },
   computed: {

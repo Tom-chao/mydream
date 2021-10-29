@@ -18,7 +18,7 @@
       <div class="fl key">{{attr.attrName}}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue,index) in attr.attrValueList" :key="index">
+          <li v-for="(attrValue,index) in attr.attrValueList" :key="index" @click="handler(attr,attrValue)">
             <a>{{attrValue}}</a>
           </li>
         </ul>
@@ -46,6 +46,12 @@ import {mapGetters} from 'vuex';
          //问题2：自定义事件的灵活使用
          //第一个参数：自定义事件名称
          this.$emit('getTradeMarkInfo',trademark);
+      },
+      //平台属性值按钮的回调
+      handler(attr,attrValue){
+         //收集到父组件需要数据，将来携带给服务器---['属性ID:value:key']
+         //通过自定义事件，将收集到的数据给父组件传递过去
+         this.$emit('getAttrInfo',attr,attrValue);
       }
     },
   }
