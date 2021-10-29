@@ -20,7 +20,7 @@
             <!-- 品牌的面包屑:字符串才有split方法-->
             <li class="with-x" v-show="searchParams.trademark">{{searchParams.trademark.split(":")[1]}}<i @click="clearTradeMark">×</i></li>
             <!-- 展示平台属性的面包屑：平台属性存储于数组里面，可能有多个平台属性，一次需要遍历 -->
-            <li class="with-x" v-for="(prop,index) in searchParams.props" :key="index">{{prop.split(":")[1]}}<i>×</i></li>
+            <li class="with-x" v-for="(prop,index) in searchParams.props" :key="index">{{prop.split(":")[1]}}<i @click="clearProp(index)">×</i></li>
           </ul>
         </div>
         <!--selector:属于search组件的一个子组件-->
@@ -223,26 +223,26 @@ export default {
     },
     //排序的回调
     changeOrder(flag){
-        // console.log('用户最新点击的按钮的标记',flag);
-       //flag形参:接受的是一个字符串【1、2】，取决于用户点击的是综合（1）、价格（2）
-       //flag这个形参是用户点击的那个标记参数1|2
-       //1:先获取order初始值：综合、价格 升序、降序
-       let originFlag = this.searchParams.order.split(":")[0];
-       let originSort = this.searchParams.order.split(":")[1];
-       //创建一个新的排序方式
-       let newOrder = ''
-       //判断：用户点击的是带背景颜色按钮(谁有背景颜色点击的就是谁)
-       if(originFlag==flag){
-          newOrder = `${originFlag}:${originSort=='desc'?'asc':'desc'}`;
-       }else{
-         //判断：点击的是不带背景颜色的按钮
-         newOrder = `${flag}:desc`;
-       }
-
-       //重新整理参数
-       this.searchParams.order = newOrder;
+      //flag形参：用户点击综合或者价格标记
+      //order默认初始值:综合降序  1:desc
+      let orginFlag = this.searchParams.order.split(':')[0];
+      let originSort = this.searchParams.order.split(":")[1];
+      //准备一个新的排序方式---【页面效果永远不会变的】
+      let newOrder = '';
+      //判断:用户点击的是带有背景颜色按钮
+      if(flag==orginFlag){
+         newOrder = `${orginFlag}:${originSort=='desc'?'asc':'desc'}`
+      }else{
+        //点击的是不带颜色按钮
+        newOrder = `${flag}:desc`
+      }
+      //携带给服务器参数
+      this.searchParams.order = newOrder;
+    },
+    //删除平台属性的方法
+    clearProp(index){
+       this.searchParams.props.splice(index,1);
        this.getSearchList();
-  
     }
   },
   computed: {
