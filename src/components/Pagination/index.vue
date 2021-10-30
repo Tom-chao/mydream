@@ -1,21 +1,13 @@
 <template>
   <div class="pagination">
     {{ startAndEndNum }}
-    <button>上一页</button>
-    <button>1</button>
-
-    <button>···</button>
-
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button>
-
-    <button>···</button>
-    <button>{{ totalPage }}</button>
-    <button>下一页</button>
-
+    <button :disabled="pageNo==1" @click="$emit('currentPage',pageNo-1)">上一页</button>
+    <button v-if="startAndEndNum.start>=2" @click="$emit('currentPage',1)">1</button>
+    <button v-if="startAndEndNum.start>=3">···</button>
+    <button v-for="page in  startAndEndNum.end" :key="page" v-if="page>=startAndEndNum.start" :class="{active:pageNo==page}" @click="$emit('currentPage',page)">{{page}}</button>
+    <button v-if="startAndEndNum.end < totalPage - 1">···</button>
+    <button v-if="startAndEndNum.end < totalPage" @click="$emit('currentPage',totalPage)">{{ totalPage }}</button>
+    <button :disabled="pageNo==totalPage" @click="$emit('currentPage',pageNo+1)">下一页</button>
     <button style="margin-left: 30px">共 {{ total }} 条</button>
   </div>
 </template>

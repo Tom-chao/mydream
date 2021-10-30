@@ -86,9 +86,9 @@
           total:分页器需要一共展示多少条数据  
           pageSize:每一页展示几条数据  
           pageNo:当前第几页
-          continues:连续页码数5 7 9 11
+          continues:连续页码数5 7 9 112
           -->
-          <Pagination :total="99" :pageSize="3" :pageNo="33" :continues="5"/>
+          <Pagination :total="total" :pageSize="searchParams.pageSize" :pageNo="searchParams.pageNo" :continues="5" @currentPage="currentPage"/>
         </div>
       </div>
     </div>
@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 import SearchSelector from "./SearchSelector/SearchSelector";
 //辅助函数
 import { mapGetters } from "vuex";
@@ -117,7 +118,8 @@ export default {
         //上面这七个参数：有用户选择决定的，因此初始值为空的
         //下面这三个：都有初始值
         order: "1:desc", //携带给服务器参数order--->初始值"1:desc"[综合降序]
-        pageNo: 1, //获取第几页的数据，默认即为第一个的数据
+        pageNo:1,
+        // pageNo:parseInt(localStorage.getItem('pageNo'))||1, //获取第几页的数据，默认即为第一个的数据
         pageSize:3, //每一页需要展示多少条数据
 
       },
@@ -223,6 +225,15 @@ export default {
     clearProp(index){
        this.searchParams.props.splice(index,1);
        this.getSearchList();
+    },
+    //分页器的自定义事件，将用户点击的第几页数据传递给父组件
+    currentPage(pageNo){
+       //修改给服务器携带的参数
+       this.searchParams.pageNo = pageNo;
+       //本次存储持久化
+      //  localStorage.setItem('pageNo',pageNo);
+       //再次发请求
+       this.getSearchList();
     }
   },
   computed: {
@@ -242,7 +253,10 @@ export default {
     //是不是升序
     isAsc(){
        return this.searchParams.order.indexOf('asc')!=-1;
-    }
+    },
+    ...mapState({
+       total:state=>state.search.searchList.total
+    })
   },
   //监听路由的变化
   watch: {
