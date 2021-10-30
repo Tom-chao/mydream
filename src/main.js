@@ -9,23 +9,24 @@ import store from '@/store';
 //当然书写这里请求只会发一次，当然可以进行性能优化
 //store.dispatch('getCategory')
 //注册全局组件---三级联动
+import Pagination from '@/components/Pagination';
 import TypeNav from '@/components/TypeNav';
 //全局组件注册方式:
 //第一参数:组件名字  第二个参数：哪一个组件
 //elementUI注册组件其中有一种写法，就是这种写法
-Vue.component(TypeNav.name,TypeNav);
+Vue.component(TypeNav.name, TypeNav);
+Vue.component(Pagination.name,Pagination);
 //引入先关的mock数据的文件【需要代码执行一次】
 import "@/mock/serve";
-
 //引入swiper需要使用的样式[项目当中用到swiper的地方很多，样式引入一次即可
 import "swiper/css/swiper.css"
 //注册全局的轮播图组件
 import Carousel from '@/components/Carousel';
-Vue.component( Carousel.name,Carousel);
+Vue.component(Carousel.name, Carousel);
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),
-  beforeCreate(){
+  beforeCreate() {
     //配置全局事件总线
     Vue.prototype.$bus = this;
   }
