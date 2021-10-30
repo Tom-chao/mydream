@@ -1,16 +1,14 @@
 <template>
   <div class="detail">
-    <!-- 商品分类导航 -->
+    <!-- 商品分类导航:三级联动 -->
     <TypeNav />
-
     <!-- 主要内容区域 -->
     <section class="con">
       <!-- 导航路径区域 -->
       <div class="conPoin">
-        <span>手机、数码、通讯</span>
-        <span>手机</span>
-        <span>Apple苹果</span>
-        <span>iphone 6S系类</span>
+            <span v-show="categoryView.category1Name">{{categoryView.category1Name}}</span>
+            <span v-show="categoryView.category2Name">{{categoryView.category2Name}}</span>
+            <span v-show="categoryView.category3Name">{{categoryView.category3Name}}</span>
       </div>
       <!-- 主要内容区域 -->
       <div class="mainCon">
@@ -349,13 +347,20 @@
 <script>
   import ImageList from './ImageList/ImageList'
   import Zoom from './Zoom/Zoom'
-
+  import {mapGetters} from 'vuex';
   export default {
     name: 'Detail',
     
     components: {
       ImageList,
       Zoom
+    },
+    created(){
+      //派发action,获取详情的数据，需要携带产品的id
+      this.$store.dispatch('getDetailList',this.$route.params.skuId);
+    },
+    computed:{
+      ...mapGetters(['categoryView'])
     }
   }
 </script>
