@@ -39,7 +39,11 @@
             class="input-error input-xxlarge"
             v-model="keyword"
           />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
+          <button
+            class="sui-btn btn-xlarge btn-danger"
+            type="button"
+            @click="goSearch"
+          >
             搜索
           </button>
         </form>
@@ -51,35 +55,41 @@
 <script>
 export default {
   name: "",
-  data(){
+  data() {
     return {
       //收集表单数据---关键字的
-      keyword:''  
-    }
+      keyword: "",
+    };
   },
-  methods:{
+  methods: {
     //搜索按钮的回调函数,点击的时候，home跳转到search
-    goSearch(){
+    goSearch() {
       //当年点击搜索按钮的时候，携带的是params参数，params参数可传递|不传递--->?
       //如果可传递|不传递，万一传递的是空字符串，会出现路径问题，
       //判断：点击搜索按钮之前，稍微判断一下是否有query参数，如果有query参数，携带给search
       //if判断你可以写，也可以不书写，判断没有任何意义【空对象隐式转换为布尔值真】
-      if(this.$route.query){
+      if (this.$route.query) {
         //本身点击搜索按钮，当年只是携带params，如果路径当中存在query参数，是需要把query参数页携带给search
-        let location = {name:'search',params:{keyword:this.keyword||undefined}};
+        let location = {
+          name: "search",
+          params: { keyword: this.keyword || undefined },
+        };
         location.query = this.$route.query;
-        this.$router.push(location)
+        if (this.$route.path != "/home") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
       }
-     
-    }
+    },
   },
-  mounted(){
+  mounted() {
     //监听自定义事件
-    this.$bus.$on('changeKeyword',()=>{
-        //关键字置空
-        this.keyword ='';
-    })
-  }
+    this.$bus.$on("changeKeyword", () => {
+      //关键字置空
+      this.keyword = "";
+    });
+  },
 };
 </script>
 

@@ -110,7 +110,8 @@ export default {
       //给a标签添加自定义属性data-categoryName，保证这个节点带data-categoryName，一定是a标签
       //可以通过节点的dataset属性获取相应节点的自定义属性，返回的是一个对象KV【自定义属性相关的】
       //如果带有categoryname字段的一定是a标签
-      let { categoryname, category1id, category2id, category3id } = nodeElement.dataset;
+      let { categoryname, category1id, category2id, category3id } =
+        nodeElement.dataset;
       //执行if语句：只能区分点击的标签是不是a
       if (categoryname) {
         //准备路由跳转的参数
@@ -127,13 +128,19 @@ export default {
           query.category3Id = category3id;
         }
         //路由跳转之前：看一下有没有params参数，如果有params参数需要携带给search
-        if(this.$route.params){
-         //query参数
-         location.query = query;
-         //params
-         location.params = this.$route.params;
-         //如有有params参数也需要携带给search模块
-         this.$router.push(location);
+        if (this.$route.params) {
+          //query参数
+          location.query = query;
+          //params
+          location.params = this.$route.params;
+          //如有有params参数也需要携带给search模块
+          //home->search确实需要记录历史
+          //search->search不需要存储历史记录
+          if (this.$route.path != "/home") {
+            this.$router.replace(location);
+          } else {
+            this.$router.push(location);
+          }
         }
       }
     },
@@ -292,18 +299,18 @@ export default {
     //如果transiton没有name属性 ： v-enter   v-enter-to v-enter-active
     //如果transition有name属性  ： name的属性值-enter  name的属性值-enter-to
     //进入状态：开始阶段
-    .sort-enter{
+    .sort-enter {
       height: 0px;
       transform: rotate(0deg);
     }
     //进入状态：结束阶段
-    .sort-enter-to{
-         height: 461px;
-         transform: rotate(360deg);
+    .sort-enter-to {
+      height: 461px;
+      transform: rotate(360deg);
     }
     //定义过渡动画的时间等等
-    .sort-enter-active{
-      transition: all .2s;
+    .sort-enter-active {
+      transition: all 0.2s;
     }
   }
 }
