@@ -69,9 +69,9 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt">
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="count" @blur="changeCount">
+                <a href="javascript:" class="plus" @click="count < 6 ? count++:count">+</a>
+                <a href="javascript:" class="mins" @click="count > 1 ? count--:count">-</a>
               </div>
               <div class="add">
                 <a href="javascript:">加入购物车</a>
@@ -330,7 +330,12 @@
   import {mapGetters} from 'vuex';
   export default {
     name: 'Detail',
-    
+    data(){
+       return {
+         //产品的个数
+         count:1
+       }
+    },
     components: {
       ImageList,
       Zoom
@@ -360,6 +365,12 @@
          saleAttrValue.isChecked = '1';
 
       },
+      //当用户输入完毕产品的个数，维持文本框里面的数据合法的
+      changeCount(event){
+        //获取用户输入进来的内容
+        console.log(event.target.value);
+        //不合法的情况:出现汉字、负数
+      }
     },
   }
 </script>
