@@ -29,6 +29,14 @@ const getters = {
        //情况2:当服务器的数据返回，detailList属性的属性值发生变化，重新计算（detailList）存储即为服务器的数据，
        //给组件给的也是服务器的数据
        return state.detailList.categoryView||{}
+    },
+    //产品的属性的数据简化
+    spuSaleAttrList(state){
+       return state.detailList.spuSaleAttrList; 
+    },
+    //产品详情的数据的简化
+    skuInfo(state){
+      return state.detailList.skuInfo||{};
     }
 };
 export default {

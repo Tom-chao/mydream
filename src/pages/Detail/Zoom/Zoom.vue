@@ -1,6 +1,6 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
+    <img :src="images.imgUrl" />
     <div class="event"></div>
     <div class="big">
       <img src="../images/s1.png" />
@@ -12,6 +12,15 @@
 <script>
   export default {
     name: "Zoom",
+    props:['imageList'],
+    computed:{
+      images(){
+        //detail父组件，给子组件zoom，传递的数据imageList可能是空数组，空数组的第零项可能是undefined
+        //undefined.imgUrl报错了，保证父组件给的数据（数组）第零项至少是一个对象
+        //如果是
+        return this.imageList[0]||{};
+      }
+    }
   }
 </script>
 

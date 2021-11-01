@@ -4,7 +4,7 @@
     <button :disabled="pageNo==1" @click="$emit('currentPage',pageNo-1)">上一页</button>
     <button v-if="startAndEndNum.start>=2" @click="$emit('currentPage',1)">1</button>
     <button v-if="startAndEndNum.start>=3">···</button>
-    <button v-for="page in  startAndEndNum.end" :key="page" v-if="page>=startAndEndNum.start" :class="{active:pageNo==page}" @click="$emit('currentPage',page)">{{page}}</button>
+    <button v-for="page in  startAndEndNum.end" :key="page" v-show="page>=startAndEndNum.start" :class="{active:pageNo==page}" @click="$emit('currentPage',page)">{{page}}</button>
     <button v-if="startAndEndNum.end < totalPage - 1">···</button>
     <button v-if="startAndEndNum.end < totalPage" @click="$emit('currentPage',totalPage)">{{ totalPage }}</button>
     <button :disabled="pageNo==totalPage" @click="$emit('currentPage',pageNo+1)">下一页</button>

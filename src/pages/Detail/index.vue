@@ -15,21 +15,21 @@
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom :imageList="imageList"/>
           <!-- 小图列表 -->
           <ImageList />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
           <div class="goodsDetail">
-            <h3 class="InfoName">Apple iPhone 6s（A1700）64G玫瑰金色 移动通信电信4G手机</h3>
-            <p class="news">推荐选择下方[移动优惠购],手机套餐齐搞定,不用换号,每月还有花费返</p>
+            <h3 class="InfoName">{{skuInfo.skuName}}</h3>
+            <p class="news">{{skuInfo.skuDesc}}</p>
             <div class="priceArea">
               <div class="priceArea1">
                 <div class="title">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</div>
                 <div class="price">
                   <i>¥</i>
-                  <em>5299</em>
+                  <em>{{skuInfo.price}}</em>
                   <span>降价通知</span>
                 </div>
                 <div class="remark">
@@ -62,30 +62,10 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
-              </dl>
+              <dl v-for="(saleAttr,index) in spuSaleAttrList" :key="saleAttr.id">
+                <dt class="title">{{saleAttr.saleAttrName}}</dt>
+                <dd changepirce="0" :class="{active:saleAttrValue.isChecked==1}" v-for="(saleAttrValue,index) in saleAttr.spuSaleAttrValueList" :key="saleAttrValue.id" @click="changeChecked(saleAttrValue,saleAttr.spuSaleAttrValueList)">{{saleAttrValue.saleAttrValueName}}</dd>
+              </dl>         
             </div>
             <div class="cartWrap">
               <div class="controls">
@@ -360,8 +340,27 @@
       this.$store.dispatch('getDetailList',this.$route.params.skuId);
     },
     computed:{
-      ...mapGetters(['categoryView'])
-    }
+      ...mapGetters(['categoryView','spuSaleAttrList','skuInfo']),
+      imageList(){
+        //imageList:detail父组件给子组件放大镜传递的图片的数据
+        //如果skuInfo是一个空对象，skuInfo.skuImageList等于的是undefined，不能给子组件
+        //至少给子组件一个空的数组
+        return this.skuInfo.skuImageList||[];
+      }
+    },
+    methods: {
+      changeChecked(saleAttrValue,list) {
+         //排他操作
+         //把全部的属性值isChecked属性变为0
+         //只有点击的属性值才是1 
+         list.forEach(item=>{
+            item.isChecked = '0';
+         });
+         //点击的属性值为1 
+         saleAttrValue.isChecked = '1';
+
+      },
+    },
   }
 </script>
 
