@@ -16,8 +16,11 @@ export const reqSearchList = (data)=>request({url:"/list",method:'post',data});
 //获取产品详情的接口
 ///api/item/{skuId}  get
 export const reqDetailList = (skuId)=>request({url:`/item/${skuId}`,method:'get'});
-
 //添加到购物车(对已有 物品进行数量 改动)
 ///api/cart/addToCart/{ skuId }/{ skuNum }  post
 export const reqAddOrUpdateShopCart = (skuId,skuNum)=>request({url:`/cart/addToCart/${skuId}/${skuNum}`,method:'post'});
+
+//获取购物车的数据
+///api/cart/cartList   get 
+export const reqShopCartList = ()=>request({url:'/cart/cartList',method:'get'});
 

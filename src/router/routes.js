@@ -3,8 +3,9 @@ import Home from '@/pages/Home';
 import Search from '@/pages/Search';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
-import Detail from '@/pages/Detail'
-import AddCartSuccess from '@/pages/AddCartSuccess'
+import Detail from '@/pages/Detail';
+import AddCartSuccess from '@/pages/AddCartSuccess';
+import ShopCart from '@/pages/ShopCart'
 export default [
     {
         path: '/home',
@@ -50,5 +51,10 @@ export default [
        component:AddCartSuccess,
        meta:{show:true},
        name:"addcartsuccess"
+    },
+    {
+        path:'/shopcart',
+        component:ShopCart,
+        meta:{show:true}
     }
 ]
