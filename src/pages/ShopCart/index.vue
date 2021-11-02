@@ -31,12 +31,14 @@
               @click="updateSkuNum(shop, -1, 'minus')"
               >-</a
             >
+            <!-- 用户输入地方幺蛾子一定多 -->
             <input
               autocomplete="off"
               type="text"
               minnum="1"
               class="itxt"
               :value="shop.skuNum"
+              @input="updateSkuNum(shop, $event.target.value * 1, 'input')"
             />
             <a
               href="javascript:void(0)"
@@ -85,6 +87,10 @@
 
 <script>
 import { mapGetters } from "vuex";
+//引入节流函数【按需加载】
+//引入_把lodash全部引入进来
+import throttle from "lodash/throttle"; 
+console.log(throttle);
 export default {
   name: "ShopCart",
   mounted() {
@@ -97,10 +103,11 @@ export default {
       //通知Vuex发请求，获取用户的购物车的数据
       this.$store.dispatch("getShopCart");
     },
-    //修改产品的个数的回调
-    async updateSkuNum(shop, disNum, flag) {
+    //注意：上下文的问题---->别用箭头函数
+    updateSkuNum:throttle(async function(shop, disNum, flag){
+        console.log(1111);
       //第一个参数:shop,点击的那个产品
-      //第二个参数:disNum,目前(加减按钮)，数量发生变化的数值
+      //第二个参数:disNum,目前(加减按钮)，数量发生变化的数值,如果是表单元素disNum【最终数值 - 起始数值】
       //第三个参数：flag,用来区分（加、减、文本框标记）
       switch (flag) {
         //加
@@ -117,18 +124,31 @@ export default {
             disNum = 0;
           }
           break;
+        case "input":
+          //非正常的情况判断---【汉字、出现负数】
+          if (isNaN(disNum) || disNum < 1) {
+            //用户输入进来的数值不合法，已有的数量不变
+            disNum = 0;
+          } else {
+            //如果用户输入进来数值--正常（算出差值）
+            disNum = parseInt(disNum) - shop.skuNum;
+          }
+          break;
       }
-
+       console.log(this);
       //判断修改成功与失败
       try {
         //发请求，通知服务器修改产品的数量，修改产品数量如果成功，需要再次获取购物车的数据进行展示，展示最新的数据。
-        await this.$store.dispatch("addShopCart", {skuId: shop.skuId,skuNum: disNum});
+        await this.$store.dispatch("addShopCart", {
+          skuId: shop.skuId,
+          skuNum: disNum,
+        });
         //再次获取购物车最新的数据进行展示
         this.getShopCartData();
       } catch (error) {
-        alert('修改失败')
+        alert("修改失败");
       }
-    },
+     },500)
   },
   computed: {
     ...mapGetters(["shopCartData"]),
