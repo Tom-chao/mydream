@@ -24,7 +24,13 @@
             <span class="price">{{ shop.cartPrice }}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <!-- 购物车加减操的地方 -->
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="updateSkuNum(shop, -1, 'minus')"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
@@ -32,7 +38,12 @@
               class="itxt"
               :value="shop.skuNum"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="updateSkuNum(shop, 1, 'add')"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ shop.skuNum * shop.cartPrice }}</span>
@@ -56,10 +67,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>{{shopList.length}}</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ shopList.length }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">{{totalPrice}}</i>
+          <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -82,6 +96,38 @@ export default {
     getShopCartData() {
       //通知Vuex发请求，获取用户的购物车的数据
       this.$store.dispatch("getShopCart");
+    },
+    //修改产品的个数的回调
+    async updateSkuNum(shop, disNum, flag) {
+      //第一个参数:shop,点击的那个产品
+      //第二个参数:disNum,目前(加减按钮)，数量发生变化的数值
+      //第三个参数：flag,用来区分（加、减、文本框标记）
+      switch (flag) {
+        //加
+        case "add":
+          //disNum:数量变化的数值，带给服务器的
+          disNum = 1;
+          break;
+        case "minus":
+          //当前点击的产品个数如果大于1，带给服务器数量变化的数值 -1
+          if (shop.skuNum > 1) {
+            disNum = -1;
+          } else {
+            //点击产品的个数小于等于，带给服务器数量变化的数值 0 [数字原封不动]
+            disNum = 0;
+          }
+          break;
+      }
+
+      //判断修改成功与失败
+      try {
+        //发请求，通知服务器修改产品的数量，修改产品数量如果成功，需要再次获取购物车的数据进行展示，展示最新的数据。
+        await this.$store.dispatch("addShopCart", {skuId: shop.skuId,skuNum: disNum});
+        //再次获取购物车最新的数据进行展示
+        this.getShopCartData();
+      } catch (error) {
+        alert('修改失败')
+      }
     },
   },
   computed: {
