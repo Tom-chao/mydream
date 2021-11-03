@@ -47,6 +47,29 @@ const actions = {
            return Promise.reject(new Error('faile'));
        }
     }
+    ,
+    //修改全部的产品的选中状态的方法
+    //在action当中如何获取到仓库中的存储的数据
+    //1:获取到全部购物车的数据【数组：六个元素】
+    //2:触发updateChecked这个action六次【全部产品都修改了】
+    //3:updateAllCart,返回一个Promise，告诉组件成功了，还是败了【组件才能继续写别的业务】
+    updateAllCart({getters,dispatch,commit},isChecked){
+         //minStore：获取仓库中的state、计算属性getters
+         //minStore: disptach方法可以派发action
+         //commit:提交mutation，修改state
+         //遍历购物车里面产品：购物车里面有多少产品，回调就执行多少次
+         let arr = [];
+         getters.shopCartData.cartInfoList.forEach(cart=>{
+                //在当前action内部，调用顶部action执行N次
+              let promise  = dispatch('updateChecked',{skuId:cart.skuId,isChecked});
+              arr.push(promise);
+         })
+
+         //如果不书写return，返回结果永远undefined，永远是真
+         //Promise.all执行,参数需要的是一个数组，数组里面每一个都是promise，如果都成功，promise返回即为成功结果
+         //如果有一个【修改状态】promise失败返回的结果即为失败
+         return Promise.all(arr);//可以保证 updateAllCart返回的是promise【成功、失败】
+    }
 
 };
 const getters = {

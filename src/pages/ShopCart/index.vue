@@ -66,7 +66,13 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <!-- isCheck:计算出来的一个属性，在判断勾不勾选（布尔值） -->
+        <input
+          class="chooseAll"
+          type="checkbox"
+          v-model="isChecks"
+          @change="updateAllChecked"
+        />
         <span>全选</span>
       </div>
       <div class="option">
@@ -182,6 +188,20 @@ export default {
         alert("修改失败");
       }
     },
+    //修改全部商品选中状态
+    async updateAllChecked(event) {
+      //获取当前全选的这个复选框的状态,你能获取到全选按钮的选中还是未选中状态
+      let isChecked = event.target.checked ? "1" : "0";
+      //通知Vuex发请求：请求次数和数组里面元素个数一样的，要么大家都是1，要么大家都是0
+      //派发action
+
+      try {
+        await this.$store.dispatch("updateAllCart", isChecked);
+        this.getShopCartData();
+      } catch (error) {
+         alert('修改失败')
+      }
+    },
   },
   computed: {
     ...mapGetters(["shopCartData"]),
@@ -199,6 +219,12 @@ export default {
         sum += item.skuNum * item.cartPrice;
       });
       return sum;
+    },
+    //全选按钮选中|未选中
+    isChecks() {
+      //遍历数组里面的每一个元素（产品）：如果每一个产品的isChecked属性都为1->勾上
+      //如果有一个产品isChecked属性为零，底下计算返回的是布尔值false->不够选上
+      return this.shopList.every((item) => item.isChecked == 1);
     },
   },
 };
