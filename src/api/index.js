@@ -24,3 +24,13 @@ export const reqAddOrUpdateShopCart = (skuId,skuNum)=>request({url:`/cart/addToC
 ///api/cart/cartList   get 
 export const reqShopCartList = ()=>request({url:'/cart/cartList',method:'get'});
 
+//删除购物车某一个产品的接口
+///api/cart/deleteCart/{skuId}  delete 
+export const reqDeleteCartById = (skuId)=>request({url:`/cart/deleteCart/${skuId}`,method:'delete'});
+
+
+//修改某一个产品的选中状态接口
+//api/cart/checkCart/{skuId}/{isChecked}  get 
+//需要注意：从文档拷贝过来路径skuId小写的
+export const reqUpdateCartChecked = (skuId,isChecked)=>request({url:`/cart/checkCart/${skuId}/${isChecked}`,method:'get'});
+

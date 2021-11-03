@@ -14,7 +14,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="(shop, index) in shopList" :key="shop.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              v-model="shop.isChecked"
+              @change="updateChecked(shop, $event)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="shop.imgUrl" />
@@ -51,7 +56,8 @@
             <span class="sum">{{ shop.skuNum * shop.cartPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <!-- 点击删除按钮：删除选中产品 -->
+            <a class="sindelet" @click="deleteCart(shop)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -89,8 +95,7 @@
 import { mapGetters } from "vuex";
 //引入节流函数【按需加载】
 //引入_把lodash全部引入进来
-import throttle from "lodash/throttle"; 
-console.log(throttle);
+import throttle from "lodash/throttle";
 export default {
   name: "ShopCart",
   mounted() {
@@ -104,8 +109,8 @@ export default {
       this.$store.dispatch("getShopCart");
     },
     //注意：上下文的问题---->别用箭头函数
-    updateSkuNum:throttle(async function(shop, disNum, flag){
-        console.log(1111);
+    updateSkuNum: throttle(async function (shop, disNum, flag) {
+      console.log(1111);
       //第一个参数:shop,点击的那个产品
       //第二个参数:disNum,目前(加减按钮)，数量发生变化的数值,如果是表单元素disNum【最终数值 - 起始数值】
       //第三个参数：flag,用来区分（加、减、文本框标记）
@@ -135,7 +140,7 @@ export default {
           }
           break;
       }
-       console.log(this);
+      console.log(this);
       //判断修改成功与失败
       try {
         //发请求，通知服务器修改产品的数量，修改产品数量如果成功，需要再次获取购物车的数据进行展示，展示最新的数据。
@@ -148,7 +153,35 @@ export default {
       } catch (error) {
         alert("修改失败");
       }
-     },500)
+    }, 500),
+    //删除某一个产品
+    async deleteCart(shop) {
+      //派发action：通知Vuex发请求，告诉服务器删除哪一个产品
+      try {
+        //删除产品的操作成功
+        await this.$store.dispatch("deleteCart", shop.skuId);
+        //再次获取最新的购物车的数据进行展示
+        this.getShopCartData();
+      } catch (error) {
+        alert("删除产品失败");
+      }
+    },
+    //修改某一个产品的选中状态与未选中状态
+    async updateChecked(shop, event) {
+      //获取勾选与未勾选的状态
+      //整理参数
+      let isChecked = event.target.checked ? "1" : "0";
+      //通知Vuex发请求
+      try {
+        await this.$store.dispatch("updateChecked", {
+          skuId: shop.skuId,
+          isChecked,
+        });
+        this.getShopCartData();
+      } catch (error) {
+        alert("修改失败");
+      }
+    },
   },
   computed: {
     ...mapGetters(["shopCartData"]),
