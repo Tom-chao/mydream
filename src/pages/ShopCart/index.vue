@@ -76,7 +76,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a @click="deleteCartChecked">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -199,7 +199,17 @@ export default {
         await this.$store.dispatch("updateAllCart", isChecked);
         this.getShopCartData();
       } catch (error) {
-         alert('修改失败')
+        alert("修改失败");
+      }
+    },
+    //删除选中的商品
+    async deleteCartChecked() {
+      //派发action
+      try {
+        await this.$store.dispatch("deleteCartByChecked");
+        this.getShopCartData();
+      } catch (error) {
+        alert("删除失败");
       }
     },
   },
@@ -224,7 +234,7 @@ export default {
     isChecks() {
       //遍历数组里面的每一个元素（产品）：如果每一个产品的isChecked属性都为1->勾上
       //如果有一个产品isChecked属性为零，底下计算返回的是布尔值false->不够选上
-      return this.shopList.every((item) => item.isChecked == 1);
+      return this.shopList.every((item) => item.isChecked == 1) && this.shopList.length>0;
     },
   },
 };

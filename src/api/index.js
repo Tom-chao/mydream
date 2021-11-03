@@ -34,3 +34,13 @@ export const reqDeleteCartById = (skuId)=>request({url:`/cart/deleteCart/${skuId
 //需要注意：从文档拷贝过来路径skuId小写的
 export const reqUpdateCartChecked = (skuId,isChecked)=>request({url:`/cart/checkCart/${skuId}/${isChecked}`,method:'get'});
 
+
+//用户获取到验证码的接口
+///api/user/passport/sendCode/{phone}  get 
+export const reqCode = (phone)=>request({url:`/user/passport/sendCode/${phone}`,method:'get'});
+
+//注册用户接口
+//api/user/passport/register  post  phone code password
+export const reqRegister = (phone,code,password)=>request({url:`/user/passport/register`,method:'post',data:{phone,code,password}});
+
+
