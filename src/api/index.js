@@ -43,4 +43,8 @@ export const reqCode = (phone)=>request({url:`/user/passport/sendCode/${phone}`,
 //api/user/passport/register  post  phone code password
 export const reqRegister = (phone,code,password)=>request({url:`/user/passport/register`,method:'post',data:{phone,code,password}});
 
+//登录接口
+///api/user/passport/login  post phone password
+export const reqLogin = (phone,password)=>request({url:`/user/passport/login`,method:'post',data:{phone,password}});
+
 
