@@ -1,15 +1,28 @@
-import { reqCode, reqRegister, reqLogin } from "@/api";
+import { reqCode, reqRegister, reqLogin, reqUserInfo, reqLogout } from "@/api";
+import { setToken,getToken,clearToken} from '@/utils/token'
 //登录与注册模块仓库
 const state = {
     code: '',
-    token:''
+    token:getToken(),
+    userInfo: {}
 };
 const mutations = {
     GETCODE(state, code) {
         state.code = code;
     },
-    SETTOKEN(state,token){
-        state.token =token;
+    SETTOKEN(state, token) {
+        state.token = token;
+    },
+    //存储用户信息
+    GETUSERINGO(state, userInfo) {
+        state.userInfo = userInfo;
+    },
+    //退出登录情况全部用户信息
+    USERLOGOUT(state){
+       state.token = '';
+       state.userInfo = {};
+       //本地存储数据【token】
+       clearToken();
     }
 };
 const actions = {
@@ -39,18 +52,38 @@ const actions = {
     async userLogin({ commit }, { phone, password }) {
         //当前的这个action，向服务器发起登录请求
         let result = await reqLogin(phone, password);
-        //登录成功以后，后台会给你返回一个token【令牌:很重要，后台实现是通过jwt插件完成的】字符串身份凭证
-        //目前接口设计不合理:后台只是会把token返回给你，存储token，利用token【身份凭证找服务器用户新的】
-        //token：令牌。后台识别用户身份凭证
-        if(result.code==200){
+        //切记:当用户登录成功以后，服务器会返回相应数据信息，数据信息当中包含token
+        //登录成功一定是有token，登录没有成功【没有token】
+        //用户登录成功，一般只是返回token，很少返回用户名
+        //将来需要在发请求（获取用户名字的）携带token给服务器【用户信息】
+        if (result.code == 200) {
             //如果仓库,已经存储token,用户一定是登陆了
-            commit("SETTOKEN",result.data.token);
+            commit("SETTOKEN", result.data.token);
+            //持久化存储token
+            setToken(result.data.token);
             return 'ok';
-        }else{
+        } else {
             //登录失败
             return Promise.reject(result.message);
         }
-      
+
+    },
+    //获取用户信息:只要出发这个action，就可以获取用户信息
+    async getUserInfo({ commit }) {
+        //为什么用户已经登录：但是获取不到用户信息，因为获取用户信息需要携带token
+        //这样服务器才知道你是谁，才会返回相应的用户额信息
+        let result = await reqUserInfo();
+        if (result.code == 200) {
+            commit("GETUSERINGO", result.data)
+        }
+    },
+    //退出登录
+    async userLogout({commit}) {
+        //发请求通知服务器销毁token
+        let result = await reqLogout();
+        if(result.code==200){
+            commit("USERLOGOUT");
+        }
     }
 };
 const getters = {};

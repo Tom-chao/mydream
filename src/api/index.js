@@ -48,3 +48,13 @@ export const reqRegister = (phone,code,password)=>request({url:`/user/passport/r
 export const reqLogin = (phone,password)=>request({url:`/user/passport/login`,method:'post',data:{phone,password}});
 
 
+//获取用户信息的接口
+//api/user/passport/auth/getUserInfo  get
+export const reqUserInfo = ()=>request({url:`/user/passport/auth/getUserInfo`,method:'get'});
+
+
+//退出登录的接口【通知服务器销毁当前token身份】
+///api/user/passport/logout  get 
+export const reqLogout = ()=>request({url:`/user/passport/logout`,method:'get'});
+
+

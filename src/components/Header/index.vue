@@ -5,11 +5,16 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <!-- 用户登录了，显示用户信息与退出登录 ||用户没有登录，显示的是登录与注册-->
+          <p v-if="!userInfo.name">
             <span>请</span>
             <!-- 声明式导航务必要有to属性 -->
             <router-link to="/login">登录</router-link>
             <router-link class="register" to="/register">免费注册</router-link>
+          </p>
+          <p v-else>
+             <a>{{userInfo.name}}</a>
+             <a class="register" @click="logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -53,6 +58,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: "",
   data() {
@@ -82,6 +88,11 @@ export default {
         }
       }
     },
+    //退出登录
+    logout(){
+       //退出登录的请求
+       this.$store.dispatch('userLogout');
+    }
   },
   mounted() {
     //监听自定义事件
@@ -90,6 +101,11 @@ export default {
       this.keyword = "";
     });
   },
+  computed:{
+    ...mapState({
+       userInfo:state=>state.user.userInfo
+    })
+  }
 };
 </script>
 

@@ -28,7 +28,7 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 import routes from './routes'
 //对外默认暴露一个VueRouter的实例
 //在路由配置的时候，对外暴露一个Router类的一个实例
-export default new VueRouter({
+const router =  new VueRouter({
      //配置路由
      routes,
      //滚动行为的设置
@@ -38,4 +38,21 @@ export default new VueRouter({
           return {y:0}
      }
 
+});
+
+//全局守卫使用:全局守卫它router【VueRouter类的一个实例】的一个方法
+//全局守卫【前置守卫:在路由跳转之前会执行一次】
+router.beforeEach((to,from,next)=>{
+     //to:要去哪里【路由信息】
+     //from:从哪里来【路由信息】
+     //next:是一个函数，放行函数    1:next()执行不传递参数【放行：该去哪里去哪里】 2:next(path):放行，放行到准确的某一个路由当中
+     next();
+});
+
+//全局守卫:[后置守卫:在路由跳转完毕之后才会执行一次]
+router.afterEach(()=>{
+     console.log('守卫:路由跳转完毕才会执行一次')
 })
+
+
+export default router;

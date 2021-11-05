@@ -26,6 +26,11 @@ instance.interceptors.request.use((config) => {
     if(store.state.shopcart.userTempId){
         config.headers.userTempId = store.state.shopcart.userTempId;
     }
+    //用户身份token
+    if(store.state.user.token){
+      //请求头的这个属性token，和后台老师商量好的了，不能叫做别的名字
+      config.headers.token = store.state.user.token;
+    }
     //检测到程序发请求，请求拦截器可以检测到，进度条开始动
     nprogress.start();
     return config;
