@@ -39,7 +39,6 @@ export default {
     //当父组件的mounted执行的时候，Floor组件可能没有遍历完毕
     this.$store.dispatch('getFloorList');
     /******************************登录成功向服务器发请求，获取用户信息****************************************/
-    this.$store.dispatch('getUserInfo');
   },
   //计算属性
   computed:{
