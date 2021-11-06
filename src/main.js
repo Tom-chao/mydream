@@ -23,12 +23,18 @@ import "swiper/css/swiper.css"
 //注册全局的轮播图组件
 import Carousel from '@/components/Carousel';
 Vue.component(Carousel.name, Carousel);
+
+//引入全部的请求函数
+import * as API from '@/api';
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),
   beforeCreate() {
     //配置全局事件总线
     Vue.prototype.$bus = this;
+    //把全部的请求函数：作为Vue.prototype的属性，组件实例可以获取
+    //请求函数只需要注册一次，可以在组件当中使用。
+    Vue.prototype.$API = API;
   }
   ,
   //注册路由,给组件的身上添加了$router与$route两个属性

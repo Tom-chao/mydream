@@ -58,3 +58,10 @@ export const reqUserInfo = ()=>request({url:`/user/passport/auth/getUserInfo`,me
 export const reqLogout = ()=>request({url:`/user/passport/logout`,method:'get'});
 
 
+//获取用户地址信息
+export const reqAddressInfo = ()=>request({url:`/user/userAddress/auth/findUserAddressList`,method:'get'});
+
+//获取购物清单
+export const reqShopCartInfo =()=>request({url:`/order/auth/trade`,method:'get'});
+
+
