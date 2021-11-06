@@ -7,6 +7,7 @@ import Detail from '@/pages/Detail';
 import AddCartSuccess from '@/pages/AddCartSuccess';
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
+import Pay from '@/pages/Pay'
 export default [
     {
         path: '/home',
@@ -61,6 +62,11 @@ export default [
     {
         path:'/trade',
         component:Trade,
+        meta:{show:true}
+    },
+    {
+        path:'/pay',
+        component:Pay,
         meta:{show:true}
     }
 ]

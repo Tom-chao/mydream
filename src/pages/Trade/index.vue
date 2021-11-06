@@ -4,13 +4,19 @@
     <div class="content">
       <h5 class="receive">收件人信息</h5>
       <!-- 收件人信息 -->
-      <div class="address clearFix" v-for="(user,index) in address" :key="user.id">
-        <span class="username" :class="{selected:user.isDefault==1}">{{user.consignee}}</span>
+      <div
+        class="address clearFix"
+        v-for="(user, index) in address"
+        :key="user.id"
+      >
+        <span class="username" :class="{ selected: user.isDefault == 1 }">{{
+          user.consignee
+        }}</span>
         <p @click="changeAddress(user)">
-          <span class="s1">{{user.fullAddress}}</span>
-          <span class="s2">{{user.phoneNum}}</span>
+          <span class="s1">{{ user.fullAddress }}</span>
+          <span class="s2">{{ user.phoneNum }}</span>
           <!-- 五个收件人:五个收件人都有默认地址，只有一个人才是默认地址 -->
-          <span class="s3" v-if="user.isDefault==1">默认地址</span>
+          <span class="s3" v-if="user.isDefault == 1">默认地址</span>
         </p>
       </div>
       <div class="line"></div>
@@ -30,38 +36,29 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix">
+        <!-- 展示购物车商品清单地方 -->
+        <ul
+          class="list clearFix"
+          v-for="(item, index) in orderInfo.detailArrayList"
+          :key="item.skuId"
+        >
           <li>
-            <img src="./images/goods.png" alt="" />
+            <img
+              :src="item.imgUrl"
+              alt=""
+              style="width: 100px; height: 100px"
+            />
           </li>
           <li>
             <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色
-              移动联通电信4G手机硅胶透明防摔软壳 本色系列
+              {{ item.skuName }}
             </p>
             <h4>7天无理由退货</h4>
           </li>
           <li>
-            <h3>￥5399.00</h3>
+            <h3>￥{{ item.orderPrice }}.00</h3>
           </li>
-          <li>X1</li>
-          <li>有货</li>
-        </ul>
-        <ul class="list clearFix">
-          <li>
-            <img src="./images/goods.png" alt="" />
-          </li>
-          <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色
-              移动联通电信4G手机硅胶透明防摔软壳 本色系列
-            </p>
-            <h4>7天无理由退货</h4>
-          </li>
-          <li>
-            <h3>￥5399.00</h3>
-          </li>
-          <li>X1</li>
+          <li>X{{ item.skuNum }}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -70,6 +67,7 @@
         <textarea
           placeholder="建议留言前先与商家沟通确认"
           class="remarks-cont"
+          v-model="message"
         ></textarea>
       </div>
       <div class="line"></div>
@@ -83,7 +81,7 @@
       <ul>
         <li>
           <b><i>1</i>件商品，总商品金额</b>
-          <span>¥5399.00</span>
+          <span>¥{{ orderInfo.totalAmount }}.00</span>
         </li>
         <li>
           <b>返现：</b>
@@ -96,16 +94,19 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥5399.00</span></div>
+      <div class="price">
+        应付金额:　<span>¥{{ orderInfo.totalAmount }}.00</span>
+      </div>
       <div class="receiveInfo">
         寄送至:
-        <span>{{defaultAddress.fullAddress}}</span>
-        收货人：<span>{{defaultAddress.consignee}}</span>
-        <span>{{defaultAddress.phoneNum}}</span>
+        <span>{{ defaultAddress.fullAddress }}</span>
+        收货人：<span>{{ defaultAddress.consignee }}</span>
+        <span>{{ defaultAddress.phoneNum }}</span>
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <!-- 编程式导航：在路由跳转之前，发请求的生成订单号 -->
+      <a class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -113,44 +114,85 @@
 <script>
 export default {
   name: "Trade",
-  data(){
+  data() {
     return {
-       address:[]
-    }
-  }
-  ,
+      //收件人地址信息
+      address: [],
+      //订单信息
+      orderInfo: {},
+      //收集用户的留言信息
+      message: "",
+      orderId:'',
+    };
+  },
   //交易页面的组件挂载完毕钩子
   //在开发的时候尽可能别再生命周期函数中书写acync、await关键字
   mounted() {
     this.getData();
   },
   methods: {
-    //获取用户地址信息[获取用户地址信息：前台需要用户已经登陆了]
+    //获取用户地址信息[获取用户地址信息前台需要用户已经登陆了]
+    //获取购物清单数据
     async getData() {
+      //获取用户地址信息
       let result = await this.$API.reqAddressInfo();
-       if(result.code==200){
-          //当服务器的数据返回，将起始数据进行替换
-          this.address = result.data;
-       }
+      if (result.code == 200) {
+        //当服务器的数据返回，将起始数据进行替换
+        this.address = result.data;
+      }
+      //获取购物清单数据
+      let result1 = await this.$API.reqShopCartInfo();
+      if (result1.code == 200) {
+        this.orderInfo = result1.data;
+      }
     },
     //点击设置默认地址回调
-    changeAddress(user){
-       //user：用户点击的那个收件人
-        this.address.forEach(item=>{
-            item.isDefault = '0';
-        });
-        //点击的收件人为1
-        user.isDefault = '1';
-    }
+    changeAddress(user) {
+      //user：用户点击的那个收件人
+      this.address.forEach((item) => {
+        item.isDefault = "0";
+      });
+      //点击的收件人为1
+      user.isDefault = "1";
+    },
+    //提交订单
+    async submitOrder() {
+      //整理参数
+      //交易编码
+      const { tradeNo } = this.orderInfo;
+      //交易信息：收件人、手机号、地址、购买产品（购物车列表数据）
+      let data = {
+        consignee: this.defaultAddress.consignee, //收件人的名字
+        consigneeTel: this.defaultAddress.phoneNum, //收件人得电话
+        deliveryAddress: this.defaultAddress.fullAddress, //收件人地址
+        paymentWay: "ONLINE", //在线支付
+        orderComment: this.message, //用户留言信息
+        orderDetailList: this.orderInfo.detailArrayList, //购物车清单
+      };
+      //发请求
+      let result = await this.$API.reqSubmitOrder(tradeNo, data);
+      //失败返回code->201 成功返回->200:返回数据当中带有数字【支付订单号:品牌每笔交易的标识符】
+            //成功
+       if(result.code==200){
+          this.orderId = result.data;
+          //路由跳转到支付页面
+          this.$router.push('/pay/?orderId='+this.orderId);
+       }else{
+         //失败
+         alert(result.message);
+       }
+
+
+    },
   },
-  computed:{
-     //计算出---默认地址用户
-     defaultAddress(){
-       //数组的find方法:find返回的是数组里面复合条件的元素（对象）
-       //filter|map：最终返回的是数组，还需要通过下角标获取
-       return this.address.find(user=>user.isDefault=='1')||{};
-     }
-  }
+  computed: {
+    //计算出---默认地址用户
+    defaultAddress() {
+      //数组的find方法:find返回的是数组里面复合条件的元素（对象）
+      //filter|map：最终返回的是数组，还需要通过下角标获取
+      return this.address.find((user) => user.isDefault == "1") || {};
+    },
+  },
 };
 </script>
 
