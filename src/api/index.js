@@ -69,3 +69,8 @@ export const reqShopCartInfo =()=>request({url:`/order/auth/trade`,method:'get'}
 export const reqSubmitOrder = (tradeNo,data)=>request({url:`/order/auth/submitOrder?tradeNo=${tradeNo}`,method:'post',data});
 
 
+//获取支付信息
+///api/payment/weixin/createNative/{orderId}  get
+export const reqOrderPay = (orderId)=>request({url:`/payment/weixin/createNative/${orderId}`,method:'get'});
+
+

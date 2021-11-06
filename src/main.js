@@ -26,6 +26,53 @@ Vue.component(Carousel.name, Carousel);
 
 //引入全部的请求函数
 import * as API from '@/api';
+
+
+
+
+
+
+/******************************************************************* */
+//这部分区域专门讲解elementUI
+//这种引入方式----引入全部的组件
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+// Vue.use(ElementUI);
+
+
+//按需引入相应使用的组件【按需引入注册组件的第一种方式】
+import {Button,Notification} from 'element-ui';
+//注册为全局组件---注册组件方式之一
+Vue.component(Button.name,Button);
+
+//注册组件的形式：把elementUI中组件挂载到Vue.prototype原型对象上
+//为什么把组件挂载原型对象身上---全部组件实例可以获取到
+Vue.prototype.$notify = Notification;
+
+
+
+
+
+
+/*********************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //创建Vue类的一个实例
 new Vue({
   render: h => h(App),

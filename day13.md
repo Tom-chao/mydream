@@ -57,7 +57,41 @@ axios({url:'xxx',methods:'post',data:{a:1}})
 
 
 
-4)element-UI使用
+4)获取支付信息进行展示
 
+
+
+
+
+
+
+5)element-ui官方UI组件库（插件）？
+
+react框架:
+UI组件库antd【蚂蚁金服旗下PC端UI组件库】
+antd-mobile【蚂蚁金服旗下的移动端UI组件库】
+
+Vue框架:
+element-UI【饿了吗旗下的UI组件库，官方承认的PC组件库插件】
+vant【Vue官方提供移动端UI组件库】
+
+官网地址:https://element.eleme.cn/#/zh-CN
+官网地址：https://youzan.github.io/vant/#/zh-CN/
+
+第一步：项目中安装element-ui组件库 [2.15.6版本：Vue2]
+
+
+第二步：在入口文件引入elementUI组件库
+第一种：全部引入【不采用：因为项目中只是用到一个组件，没必要全都引入进来】
+第二种：按需引入【按照开发需求引入相应的组件，并非全部组件引入】
+
+
+第三步：按需引入，安装相应的插件
+cnpm install babel-plugin-component -D
+文档中说的.babelrc文件，即为babel.config.js文件
+修改完babel.config.js配置文件以后，项目重启
+
+
+第四部：按照需求引入相应的组件即可
 
 
