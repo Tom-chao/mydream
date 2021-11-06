@@ -41,13 +41,17 @@ import * as API from '@/api';
 
 
 //按需引入相应使用的组件【按需引入注册组件的第一种方式】
-import {Button,Notification} from 'element-ui';
+import {Button,Notification,MessageBox} from 'element-ui';
 //注册为全局组件---注册组件方式之一
 Vue.component(Button.name,Button);
 
 //注册组件的形式：把elementUI中组件挂载到Vue.prototype原型对象上
 //为什么把组件挂载原型对象身上---全部组件实例可以获取到
 Vue.prototype.$notify = Notification;
+
+//注册弹框组件
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
 
 
 

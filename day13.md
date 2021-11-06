@@ -94,4 +94,31 @@ cnpm install babel-plugin-component -D
 
 第四部：按照需求引入相应的组件即可
 
+Vue.component();
+Vue.prototype.$xxx = xxx;
+
+
+
+
+6)支付业务【微信支付】
+ this.$alert('<strong>这是 <i>HTML</i> 片段</strong>', 'HTML 片段', {dangerouslyUseHTMLString: true});
+6.1今晚稍微把elementUI的组件都稍微看看。
+6.2使用messageBox显示弹框
+6.3展示二维码----qrcode插件
+通过qrCode.toDataUrl方法，将字符串转换为加密的在线二维码链接，通过图片进行展示。
+moment.js
+swiper.js
+nprogress.js
+qrcode.js
+
+GET|POST：短轮询，请求发一次，服务器响应一次，完事。
+
+第一种做法:前端开启定时器，一直找服务器要用户支付信息【定时器】
+
+第二种做法:项目务必要上线 + 和后台紧密配合
+当用户支付成功以后，需要后台重定向到项目某一个路由中，将支付情况通过URL参数形式传给前端，
+前端获取到服务器返回的参数，就可以判断了。
+
+
+
 

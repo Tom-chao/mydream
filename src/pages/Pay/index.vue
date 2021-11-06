@@ -1,9 +1,7 @@
 <template>
   <div class="pay-main">
-      <!-- 测试使用element-ui里面的组件 -->
-      <el-button type="primary" size="mini">主按钮</el-button>
-      <el-button type="success" round=true icon="el-icon-plus" @click="open">成功</el-button>
-       <el-button type="danger" loading=true>危险</el-button>
+    <!-- 测试使用element-ui里面的组件 -->
+    <el-button type="primary">主按钮</el-button>
     <div class="pay-container">
       <div class="checkout-tit">
         <h4 class="tit-txt">
@@ -15,11 +13,13 @@
         <div class="paymark">
           <span class="fl"
             >请您在提交订单<em class="orange time">4小时</em
-            >之内完成支付，超时订单会自动取消。订单号：<em>{{payInfo.orderId}}</em></span
+            >之内完成支付，超时订单会自动取消。订单号：<em>{{
+              payInfo.orderId
+            }}</em></span
           >
           <span class="fr"
             ><em class="lead">应付金额：</em
-            ><em class="orange money">￥{{payInfo.totalFee}}</em></span
+            ><em class="orange money">￥{{ payInfo.totalFee }}</em></span
           >
         </div>
       </div>
@@ -78,7 +78,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click="pay">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -95,15 +95,19 @@
 </template>
 
 <script>
+//引入二维码依赖包
+import qrcode from "qrcode";
 export default {
   name: "Pay",
-  data(){
+  data() {
     return {
-        //支付信息
-        payInfo:{}
-    }
-  }
-  ,
+      //支付信息
+      payInfo: {},
+      timer:null,
+      //保存用户支付状态
+      code:'',
+    };
+  },
   created() {
     this.getData();
   },
@@ -112,18 +116,88 @@ export default {
     async getData() {
       //获取支付信息的时候，需要携带ID，因为服务器需要知道获取那笔交易的信息
       let result = await this.$API.reqOrderPay(this.$route.query.orderId);
-       if(result.code==200){
-           this.payInfo = result.data;
-       }
+      if (result.code == 200) {
+        this.payInfo = result.data;
+      }
     },
     //测试elementUI按需引入通知组件的回调
-    open(){
-       this.$notify({
-          title: '提示',
-          message: '这是一条不会自动关闭的消息',
-          duration: 0
-        });
-    }
+    open() {
+      this.$notify({
+        title: "提示",
+        message: "这是一条不会自动关闭的消息",
+        duration: 0,
+      });
+    },
+    //立即支付按钮的回调
+    async pay() {
+      //准备二维码
+      //qrcdoe.toDataUrl需要传递一个字符串，这个函数执行，返回的是一个Promise
+      let imgUrl = await qrcode.toDataURL(this.payInfo.codeUrl);
+      //第一个参数:字符串【标签形式的字符串转换为真是DOM节点】
+      //第二参数：弹框的标题
+      //第三个参数：弹框配置对象
+      this.$alert(`<img src=${imgUrl}>`,'请微信支付', {
+        //可以把字符串形式的字符，变为真是DOM节点
+        dangerouslyUseHTMLString: true,
+        //布局居中
+        center: true,
+        //关闭右上角按钮
+        showClose: false,
+        //显示取消按钮
+        showCancelButton: true,
+        //取消按钮的文本内容设置
+        cancelButtonText: "支付遇到问题",
+        //确定按钮的文本内容设置
+        confirmButtonText: "我已支付成功",
+        //关闭弹框之前会出发的回调
+        beforeClose:(action, instance, done)=>{
+            //action:区分是取消按钮、还是确定按钮
+            //done：方法，可以关闭弹框
+            if(action=='cancel'){
+              //取消按钮：支付遇到问题的按钮-----【不能进行路由跳转】
+              alert('请你练习超级管理员，解决支付问题');
+              //隐藏弹框
+              done();
+              //清除定时器
+              clearInterval(this.timer);
+            }else{
+              //确定按钮:查询支付状态的时候，发请求如果code等等200，一定花钱了
+              if(this.code==200){
+                 //才支付
+                 clearInterval(this.timer);
+                 //关闭弹框
+                 done();
+                 //路由跳转
+                 this.$router.push('/paysuccess');
+              }else{
+                //没花钱
+                alert('请花钱，充值至尊会员，休想不花钱过去');
+                clearInterval(this.timer);
+                done();
+              }
+            }
+        }
+      });
+      //当点击立即支付按钮以后，会弹出一个二维，用户支付成功，进行路由跳转，跳转到下一路由
+      //如果支付失败，停留在当前路由，你怎么能知道用户的支付情况那？
+      //向服务器发请求，获取用户支付情况？需要与用到定时器，频繁向服务器问，用户支付情况
+      this.timer = setInterval(async ()=>{
+           let result  = await this.$API.reqOrderStatus(this.payInfo.orderId);
+           //成功
+           if(result.code==200){
+              this.code = result.code;
+              //清除定时器
+              clearInterval(this.timer);
+              //关闭弹框
+              this.$msgbox.close();
+              //路由跳转
+              this.$router.push('/paysuccess');
+           }else{
+              // console.log(result.message);
+           }
+           //失败
+      },2000);
+    },
   },
 };
 </script>
