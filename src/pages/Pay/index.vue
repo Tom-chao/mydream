@@ -162,19 +162,20 @@ export default {
               clearInterval(this.timer);
             }else{
               //确定按钮:查询支付状态的时候，发请求如果code等等200，一定花钱了
-              if(this.code==200){
-                 //才支付
+              // if(this.code==200){
+              //    //才支付
                  clearInterval(this.timer);
                  //关闭弹框
                  done();
-                 //路由跳转
-                 this.$router.push('/paysuccess');
-              }else{
-                //没花钱
-                alert('请花钱，充值至尊会员，休想不花钱过去');
-                clearInterval(this.timer);
-                done();
-              }
+              //    //路由跳转
+              //    this.$router.push('/paysuccess');
+              // }else{
+              //   //没花钱
+              //   alert('请花钱，充值至尊会员，休想不花钱过去');
+              //   clearInterval(this.timer);
+              //   done();
+              // }
+               this.$router.push('/paysuccess');
             }
         }
       });

@@ -9,6 +9,11 @@ import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
 import PaySuccess from '@/pages/PaySuccess';
+import Center from '@/pages/Center'
+
+//个人中心相应的二级路由组件
+import myOrder from '@/pages/Center/myOrder';
+import groupOrder from '@/pages/Center/groupOrder';
 export default [
     {
         path: '/home',
@@ -75,5 +80,27 @@ export default [
         path:'/paysuccess',
         component:PaySuccess,
         meta:{show:true}
+    },
+    {
+         path:'/center',
+         component:Center,
+         meta:{show:true},
+         children:[
+            //我的订单二级路由
+            {
+                 path:"myorder",
+                 component:myOrder
+            }
+            ,
+            {
+                path:'grouporder',
+                component:groupOrder
+            }
+            ,
+            {
+                  path:'/center',
+                  redirect:'/center/myorder'
+            }
+         ]
     }
 ]
