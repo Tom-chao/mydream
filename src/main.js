@@ -53,29 +53,28 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
 
-
-
-
-
-
 /*********************************************************************/
+//图片懒加载
+import VueLazyload from 'vue-lazyload'
+//使用图片懒加载插件：自定义插件【Vue.use】
+//Vue.use,回调用插件对象install方法，install方法会注入Vue构造函数
+//插件里面：Vue.component、Vue.directive、Vue.prototype.$bus、Vue.filter等等
+//在使用图片懒加载插件的时候，第二个参数：配置对象
+//引入图片模块：JSON、图片默认对外暴露
+import erha from '@/assets/images/1.gif';
+//Vue.use的时候，这个插件给咱们提供一个全局指令v-lay
+Vue.use(VueLazyload, {
+  //设置图片懒加载默认图片
+  loading: erha,
+});
 
 
+//引入自定义插件
+import jch from '@/plugins/jch';
+//Vue.use使用这个插件的时候，会出发自定义插件对象的install方法
+Vue.use(jch);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import '@/plugins/valadiate'
 
 //创建Vue类的一个实例
 new Vue({

@@ -74,7 +74,10 @@ const actions = {
         //这样服务器才知道你是谁，才会返回相应的用户额信息
         let result = await reqUserInfo();
         if (result.code == 200) {
-            commit("GETUSERINGO", result.data)
+            commit("GETUSERINGO", result.data);
+            return 'ok';
+        }else{
+            return Promise.reject(new Error('faile'));
         }
     },
     //退出登录

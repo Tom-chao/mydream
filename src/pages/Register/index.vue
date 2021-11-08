@@ -6,31 +6,42 @@
         <span class="go">我有账号，去 <a href="login.html" target="_blank">登陆</a>
         </span>
       </h3>
+      <!-- 手机号 -->
       <div class="content">
         <label>手机号:</label>
-        <input type="text" placeholder="请输入你的手机号" v-model="phone">
-        <span class="error-msg">错误提示信息</span>
+        <!-- 
+          name:给每一个表单元素添加一个名字，需要让vee-valadite区分验证的是哪一个表单元素
+           v-validate=验证规则
+         -->
+        <input type="text" placeholder="请输入你的手机号" v-model="phone" name="phone" v-validate="{ required: true, regex: /^1\d{10}$/ }"    :class="{ invalid: errors.has('phone') }">
+         <!-- 表单验证失败：提示错误信息 -->
+        <span class="error-msg">{{ errors.first("phone") }}</span>
       </div>
+      <!-- 验证码 -->
       <div class="content">
         <label>验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="code">
+        <input type="text" placeholder="请输入你的验证码" v-model="code" name="code" v-validate="{ required: true, regex: /^\d{6}$/ }"    :class="{ invalid: errors.has('phone') }">
         <button style="width:100px;height:38px" @click="getCode">获取验证码</button>
-        <span class="error-msg">错误提示信息</span>
+       <span class="error-msg">{{ errors.first("code") }}</span>
       </div>
+      <!-- 登录密码 -->
       <div class="content">
         <label>登录密码:</label>
-        <input type="text" placeholder="请输入你的登录密码" v-model="password">
-        <span class="error-msg">错误提示信息</span>
+       <input type="text" placeholder="请输入你的登录密码" v-model="password" name="password" v-validate="{ required: true, regex: /^[0-9a-zA-Z]{8,20}$/ }"    :class="{ invalid: errors.has('password') }">
+        <span class="error-msg">{{ errors.first("password") }}</span>
       </div>
+      <!-- 确认登录密码 -->
       <div class="content">
         <label>确认密码:</label>
-        <input type="text" placeholder="请输入确认密码" v-model="password1">
-        <span class="error-msg">错误提示信息</span>
+        <!-- is:紧随的判断是否相等规则 -->
+         <input type="text" placeholder="请输入你的确认密码" v-model="password1" name="password1" v-validate="{ required: true, is:password}"    :class="{ invalid: errors.has('password1') }">
+          <span class="error-msg">{{ errors.first("password1") }}</span>
       </div>
+      <!-- 协议 -->
       <div class="controls">
-        <input name="m1" type="checkbox" v-model="agree">
+       <input type="checkbox"  v-model="agree" name="agree" v-validate="{ required: true,'agree':true}"    :class="{ invalid: errors.has('agree') }">
         <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{ errors.first("agree") }}</span>
       </div>
       <div class="btn">
         <button @click="register">完成注册</button>
@@ -93,10 +104,16 @@
       },
       //完成注册按钮的回调
       async register(){
-        //携带参数的：phone code password
+      //这里是vee-valadiate提供的一个方法，如果表单验证全部成功，返回布尔值真，
+      //如有有一个字段验证失败，返回布尔值false
+      const success = await this.$validator.validateAll();
+      console.log(success);
+      if(success){
+        //进行判断：全部的字段，表单验证成功以后在发请求，
+        //只要有一个字段验证没有通过，补发请求
+         //携带参数的：phone code password
         const {phone,code,password,password1} = this;
         //不做表单验证[稍微验证一下]
-        if(password==password1 && phone && code){
            try {
              //注册成功
              await this.$store.dispatch('userRegister',{phone,code,password});
@@ -106,7 +123,7 @@
              //注册失败
              console.log(error);
            }
-        }
+      }
       }
     },
   }

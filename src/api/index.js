@@ -80,3 +80,12 @@ export const reqOrderPay = (orderId)=>request({url:`/payment/weixin/createNative
 export const reqOrderStatus = (orderId)=>request({url:`/payment/weixin/queryPayStatus/${orderId}`,method:'get'});
 
 
+
+//获取用户订单列表数据
+///api/order/auth/{page}/{limit}   get
+//page:代表当前第几页
+//limit：代表的是每一页多少条数据
+
+export const reqMyList = (page,limit)=>request({url:`/order/auth/${page}/${limit}`,method:'get'});
+
+

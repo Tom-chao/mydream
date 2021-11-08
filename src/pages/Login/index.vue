@@ -92,8 +92,9 @@ export default {
         //失败提示
         try {
           await this.$store.dispatch("userLogin", { phone, password });
-          //去首页
-          this.$router.push("/home");
+          //判断登录的组件URL：是否有query参数【即为用户未登录时候，想去而没有去成的路由】
+          let toPath = this.$route.query.redirect||'/home';
+          this.$router.push(toPath);
         } catch (error) {
           alert(error);
         }
