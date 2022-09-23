@@ -8,48 +8,24 @@
           <div class="sort" v-show="show">
             <!-- 事件的委派更加合理一些 -->
             <div class="all-sort-list2" @click="goSearch">
-              <div
-                class="item"
-                v-for="(c1, index) in categoryList"
-                :key="c1.categoryId"
-                @mouseenter="changeIndex(index)"
-              >
+              <div class="item" v-for="(c1, index) in categoryList" :key="c1.categoryId"
+                @mouseenter="changeIndex(index)">
                 <h3 :class="{ show: currentIndex === index }">
-                  <a
-                    :data-categoryName="c1.categoryName"
-                    :data-category1Id="c1.categoryId"
-                    >{{ c1.categoryName }}</a
-                  >
+                  <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{ c1.categoryName }}</a>
                 </h3>
-                <div
-                  class="item-list clearfix"
-                  :style="{
-                    display: currentIndex === index ? 'block' : 'none',
-                  }"
-                >
-                  <div
-                    class="subitem"
-                    v-for="(c2, index) in c1.categoryChild"
-                    :key="c2.categoryId"
-                  >
+                <div class="item-list clearfix" :style="{
+                  display: currentIndex === index ? 'block' : 'none',
+                }">
+                  <div class="subitem" v-for="(c2, index) in c1.categoryChild" :key="c2.categoryId">
                     <dl class="fore">
                       <dt>
-                        <a
-                          :data-categoryName="c2.categoryName"
-                          :data-category2Id="c2.categoryId"
-                          >{{ c2.categoryName }}</a
-                        >
+                        <a :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{ c2.categoryName
+                        }}</a>
                       </dt>
                       <dd>
-                        <em
-                          v-for="(c3, index) in c2.categoryChild"
-                          :key="c3.categoryId"
-                        >
-                          <a
-                            :data-categoryName="c3.categoryName"
-                            :data-category3Id="c3.categoryId"
-                            >{{ c3.categoryName }}</a
-                          >
+                        <em v-for="(c3, index) in c2.categoryChild" :key="c3.categoryId">
+                          <a :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{ c3.categoryName
+                          }}</a>
                         </em>
                       </dd>
                     </dl>
@@ -63,7 +39,7 @@
       <nav class="nav">
         <a>服装城</a>
         <a href="###">美妆馆</a>
-        <a href="###">尚品汇超市</a>
+        <a href="###">购物超市</a>
         <a href="###">全球购</a>
         <a href="###">闪购</a>
         <a href="###">团购</a>
@@ -227,15 +203,14 @@ export default {
             a {
               color: #333;
             }
+
             &.show {
-              background: linear-gradient(
-                to right,
-                pink,
-                yellow,
-                cyan,
-                blue,
-                red
-              );
+              background: linear-gradient(to right,
+                  pink,
+                  yellow,
+                  cyan,
+                  blue,
+                  red);
             }
           }
 
@@ -295,6 +270,7 @@ export default {
         }
       }
     }
+
     //过渡动画的样式
     //如果transiton没有name属性 ： v-enter   v-enter-to v-enter-active
     //如果transition有name属性  ： name的属性值-enter  name的属性值-enter-to
@@ -303,11 +279,13 @@ export default {
       height: 0px;
       transform: rotate(0deg);
     }
+
     //进入状态：结束阶段
     .sort-enter-to {
       height: 461px;
       transform: rotate(360deg);
     }
+
     //定义过渡动画的时间等等
     .sort-enter-active {
       transition: all 0.2s;

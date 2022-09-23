@@ -18,11 +18,11 @@
             <form>
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone"/>
+                <input type="text" placeholder="邮箱/用户名/手机号" v-model="phone" />
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" v-model="password"/>
+                <input type="text" placeholder="请输入密码" v-model="password" />
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -44,9 +44,7 @@
                 <li><img src="./images/ali.png" alt="" /></li>
                 <li><img src="./images/weixin.png" alt="" /></li>
               </ul>
-              <router-link class="register" to="/register"
-                >立即注册</router-link
-              >
+              <router-link class="register" to="/register">立即注册</router-link>
             </div>
           </div>
         </div>
@@ -60,9 +58,9 @@
         <li>联系客服</li>
         <li>商家入驻</li>
         <li>营销中心</li>
-        <li>手机尚品汇</li>
+        <li>手机购物</li>
         <li>销售联盟</li>
-        <li>尚品汇社区</li>
+        <li>购物社区</li>
       </ul>
       <div class="address">地址：北京市昌平区宏福科技园综合楼6层</div>
       <div class="beian">京ICP备19006430号</div>
@@ -93,7 +91,7 @@ export default {
         try {
           await this.$store.dispatch("userLogin", { phone, password });
           //判断登录的组件URL：是否有query参数【即为用户未登录时候，想去而没有去成的路由】
-          let toPath = this.$route.query.redirect||'/home';
+          let toPath = this.$route.query.redirect || '/home';
           this.$router.push(toPath);
         } catch (error) {
           alert(error);
@@ -108,13 +106,13 @@ export default {
 .login-container {
   .login-wrap {
     height: 487px;
-    background-color: #e93854;
+    background-color: #eaeaea;
 
     .login {
       width: 1200px;
       height: 487px;
       margin: 0 auto;
-      background: url(./images/loginbg.png) no-repeat;
+      background: url(./images/pc.jpg) no-repeat;
     }
 
     .loginform {

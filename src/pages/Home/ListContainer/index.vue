@@ -3,12 +3,12 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--全局轮播图组件-->
-        <Carousel :bannerList="bannerList"/>
+        <Carousel :bannerList="bannerList" />
       </div>
       <div class="right">
         <div class="news">
           <h4>
-            <em class="fl">尚品汇快报</em>
+            <em class="fl">购物快报</em>
             <span class="fr tip">更多 ></span>
           </h4>
           <div class="clearix"></div>
@@ -91,7 +91,7 @@ export default {
     //当mounted已经执行了，组件才通知vuex向服务器发请求，获取数据，动态展示数据
     //也就是说：当mounted执行完毕了，在swiper的结构才完整（先后顺序是有问题的）
     this.$store.dispatch("getBannerList");
-    
+
   },
   //计算属性
   computed: {
@@ -113,7 +113,7 @@ export default {
 
     .center {
       box-sizing: border-box;
-      width: 740px;
+      width: 600px;
       height: 100%;
       padding: 5px;
       float: left;

@@ -7,13 +7,13 @@
       <!-- 导航路径区域 -->
       <div class="conPoin">
         <span v-show="categoryView.category1Name">{{
-          categoryView.category1Name
+            categoryView.category1Name
         }}</span>
         <span v-show="categoryView.category2Name">{{
-          categoryView.category2Name
+            categoryView.category2Name
         }}</span>
         <span v-show="categoryView.category3Name">{{
-          categoryView.category3Name
+            categoryView.category3Name
         }}</span>
       </div>
       <!-- 主要内容区域 -->
@@ -51,9 +51,7 @@
                 </div>
                 <div class="fixWidth">
                   <i class="red-bg">加价购</i>
-                  <em class="t-gray"
-                    >满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em
-                  >
+                  <em class="t-gray">满999.00另加20.00元，或满1999.00另加30.00元，或满2999.00另加40.00元，即可在购物车换购热销商品</em>
                 </div>
               </div>
             </div>
@@ -76,41 +74,22 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl
-                v-for="(saleAttr, index) in spuSaleAttrList"
-                :key="saleAttr.id"
-              >
+              <dl v-for="(saleAttr, index) in spuSaleAttrList" :key="saleAttr.id">
                 <dt class="title">{{ saleAttr.saleAttrName }}</dt>
-                <dd
-                  changepirce="0"
-                  :class="{ active: saleAttrValue.isChecked == 1 }"
-                  v-for="(
+                <dd changepirce="0" :class="{ active: saleAttrValue.isChecked == 1 }" v-for="(
                     saleAttrValue, index
-                  ) in saleAttr.spuSaleAttrValueList"
-                  :key="saleAttrValue.id"
-                  @click="
+                  ) in saleAttr.spuSaleAttrValueList" :key="saleAttrValue.id" @click="
                     changeChecked(saleAttrValue, saleAttr.spuSaleAttrValueList)
-                  "
-                >
+                  ">
                   {{ saleAttrValue.saleAttrValueName }}
                 </dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input
-                  autocomplete="off"
-                  class="itxt"
-                  v-model="count"
-                  @input="changeCount"
-                />
+                <input autocomplete="off" class="itxt" v-model="count" @input="changeCount" />
                 <a href="javascript:" class="plus" @click="count++">+</a>
-                <a
-                  href="javascript:"
-                  class="mins"
-                  @click="count > 1 ? count-- : count"
-                  >-</a
-                >
+                <a href="javascript:" class="mins" @click="count > 1 ? count-- : count">-</a>
               </div>
               <div class="add">
                 <a href="javascript:" @click="addShopCart">加入购物车</a>
@@ -419,12 +398,12 @@ export default {
       try {
         //try--ctach：try当中需要有关键字await，等待的一定是成功，
         //不书写await失败也有可能走这里
-       await this.$store.dispatch("addShopCart", {skuId: this.$route.params.skuId,skuNum: this.count});
-       //本地存储与会话存储：经常遇见的面试----问你有什么区别
-       //本地存储或者会话存储不能存储对象--->存储字符串
-       sessionStorage.setItem('SKUINFO',JSON.stringify(this.skuInfo));
-       //添加购物车成功，路由跳转
-       this.$router.push({name:'addcartsuccess',query:{skuNum:this.count}});
+        await this.$store.dispatch("addShopCart", { skuId: this.$route.params.skuId, skuNum: this.count });
+        //本地存储与会话存储：经常遇见的面试----问你有什么区别
+        //本地存储或者会话存储不能存储对象--->存储字符串
+        sessionStorage.setItem('SKUINFO', JSON.stringify(this.skuInfo));
+        //添加购物车成功，路由跳转
+        this.$router.push({ name: 'addcartsuccess', query: { skuNum: this.count } });
       } catch (error) {
         alert("加入购物车失败");
       }
@@ -450,7 +429,7 @@ export default {
     .conPoin {
       padding: 9px 15px 9px 0;
 
-      & > span + span:before {
+      &>span+span:before {
         content: "/\00a0";
         padding: 0 5px;
         color: #ccc;
@@ -715,7 +694,7 @@ export default {
             }
 
             .goodsList {
-              & > li {
+              &>li {
                 margin: 5px 0 15px;
                 border-bottom: 1px solid #ededed;
                 padding-bottom: 5px;
@@ -880,7 +859,7 @@ export default {
           li {
             float: left;
 
-            & + li > a {
+            &+li>a {
               border-left: 1px solid #ddd;
             }
 
